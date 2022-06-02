@@ -10,14 +10,20 @@ def compile(filename):
 def compileRec(filename):
     with open(filename,"r") as f:
         fdata = f.read().split("\n")
+    ndata = []
     for i in range(len(fdata)):
         poi = fdata[i].find(".INCLUDE")
         if poi!=-1:
             ntoc = findQuotedDataAfter(poi,fdata[i])
-            print(ntoc)
-            fdata[i] = ";{ " + fdata[i][poi:]
+            ndata.append(";{ " + ntoc)
             ncompile = compileRec(ntoc)
-    return fdata
+            for j in ncompile:
+                ndata.append(j)
+            ndata.append(";} " + ntoc)
+        else:
+            ndata.append(fdata[i])
+
+    return ndata
 def findQuotedDataAfter(pos,strt):
     indata = ""
     prevBak = False
