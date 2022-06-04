@@ -46,8 +46,6 @@ def injectArguments(splitInst):
     global macroList
     macro = macroList[splitInst[0]]
     macInst = macro["inst"]
-    print(macro["args"])
-    print(splitInst)
     if len(macro["args"])>0:
         macArgs = splitInst[1].split(",")
     cnt = 0
