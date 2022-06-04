@@ -30,23 +30,28 @@ def compileRec(code):
     ndata = []
     for line in fdata:
         split = splitArgs(line)
+        if len(split[0])==0 or split[0][0]==";":
+            continue
         if split[0]==".INCLUDE":
             insertFileIntoList(ndata, split[1][1:-1])
         elif split[0]==".APPEND":
             appendd.append(split[1][1:-1])
         elif split[0]==".GLOBAL":
             continue
-        if split[0][-1]==":":
-            split.pop(0)
-        if pep9check.instCheck(split[0]):
-            continue
         else:
-            if split[0]!="" and split[0][0]!=";":
+            if split[0][-1]==":":
+                split.pop(0)
+            if split[0][0]==".":
+                continue
+            if pep9check.instCheck(split[0]):
+                continue
+            else:
                 if split[0] in macroList:
                     for i in injectArguments(split):
                         ndata.append(i)
                 else:
-                    ndata.append(line)
+                    print("INVALID INSTRUCTION {}".format(split[0]))
+                    # ndata.append(line)
 
     return ndata
 def injectArguments(splitInst):
