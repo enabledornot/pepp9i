@@ -1,7 +1,9 @@
+# IMPORTS
 from pep9lib import splitArgs
-
+# GLOBAL VARS
 appendd = []
 macroList = {}
+# METHODS
 def compile(filename):
     global appendd
     global macroList
