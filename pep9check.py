@@ -3,7 +3,7 @@ with open("pep9inst.txt","r") as f:
 def instCheck(instruction):
     global pep9inst
     for i in pep9inst:
-        if instruction.startsWith(removeUpper(i)):
+        if instruction.startswith(removeUpper(i)):
             return True
     return False
 def removeUpper(stri):
