@@ -1,5 +1,6 @@
 # IMPORTS
 from pep9lib import splitArgs
+import pep9check
 # GLOBAL VARS
 appendd = []
 macroList = {}
