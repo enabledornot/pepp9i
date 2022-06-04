@@ -9,6 +9,6 @@ def instCheck(instruction):
 def removeUpper(stri):
     tmp = ""
     for i in stri:
-        if i.isUpper():
+        if i.isupper():
             tmp+=i
     return tmp
