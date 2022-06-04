@@ -46,6 +46,8 @@ def injectArguments(splitInst):
     global macroList
     macro = macroList[splitInst[0]]
     macInst = macro["inst"]
+    print(macro["args"])
+    print(splitInst)
     if len(macro["args"])>0:
         macArgs = splitInst[1].split(",")
     cnt = 0
@@ -66,6 +68,8 @@ def extractMacros(fdata):
             macroName = split[1]
             if len(split)>2:
                 macroArgs = split[2].split(",")
+            else:
+                macroArgs = []
             macroInstructions = [";;" + macroName]
         elif split[0]==".MACROEND":
             macroList[macroName] = {
