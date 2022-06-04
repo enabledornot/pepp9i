@@ -47,8 +47,8 @@ def compileRec(code):
                 continue
             else:
                 if split[0] in macroList:
-                    for i in injectArguments(split):
-                        ndata.append(i)
+                    injectedMacro = injectArguments(split)
+                    insertIntoList(ndata,injectedMacro)
                 else:
                     print("INVALID INSTRUCTION {}".format(split[0]))
                     # ndata.append(line)
