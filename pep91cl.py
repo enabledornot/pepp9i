@@ -6,14 +6,17 @@ appendd = []
 macroList = {}
 # METHODS
 def compile(filename):
+    # resets global variables
     global appendd
     global macroList
     appendd = []
     macroList = {}
+    # Compiles code with appends and includes
     rslt = compileRec(readCodeFile(filename))
     rslt.append(";begin append")
     for i in appendd:
         insertFileIntoList(rslt,i)
+    # Exports file
     nfile = ";compiled by python.pep91.v1\n"
     for i in rslt:
         nfile+=i+"\n"
