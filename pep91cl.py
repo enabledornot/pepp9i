@@ -16,7 +16,8 @@ def compile(filename):
     rslt.append(";begin append")
     for i in appendd:
         insertFileIntoList(rslt,i)
-    # Exports file
+    rslt.append(";end\nnoend:     STOP\n.END")
+    # Exports
     nfile = ";compiled by python.pep91.v1\n"
     for i in rslt:
         nfile+=i+"\n"
@@ -34,6 +35,7 @@ def compileRec(code):
     for line in fdata:
         split = splitArgs(line)
         if len(split[0])==0 or split[0][0]==";":
+            ndata.append(line)
             continue
         if split[0]==".INCLUDE":
             insertFileIntoList(ndata, split[1][1:-1])
@@ -41,6 +43,8 @@ def compileRec(code):
             appendd.append(split[1][1:-1])
         elif split[0]==".GLOBAL":
             continue
+        elif split[0]==".END":
+            ndata.append("     BR     noend")
         else:
             if split[0][-1]==":":
                 split.pop(0)
@@ -50,7 +54,7 @@ def compileRec(code):
                     insertIntoList(ndata,injectedMacro)
                 else:
                     print("INVALID INSTRUCTION {}".format(split[0]))
-                    # ndata.append(line)
+                    ndata.append(";;INVALID MACRO {}".format(split[0]))
             else:
                 ndata.append(line)
 
