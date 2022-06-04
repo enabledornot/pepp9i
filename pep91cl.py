@@ -36,10 +36,12 @@ def compileRec(code):
             appendd.append(split[1][1:-1])
         elif split[0]==".GLOBAL":
             continue
+        if split[0][-1]==":":
+            split.pop(0)
+        if pep9check.instCheck(split[0]):
+            continue
         else:
             if split[0]!="" and split[0][0]!=";":
-                if split[0][-1]==":":
-                    split.pop(0)
                 if split[0] in macroList:
                     for i in injectArguments(split):
                         ndata.append(i)
