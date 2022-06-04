@@ -1,3 +1,5 @@
+from pep9lib import splitArgs
+
 appendd = []
 macroList = {}
 def compile(filename):
@@ -82,15 +84,6 @@ def extractMacros(fdata):
                 if len(line)!=0 and line[0]!=";":
                     macroInstructions.append(line)
     return nfdata
-def splitArgs(stri):
-    args = [""]
-    for i in stri:
-        if i==" ":
-            if args[-1]!="":
-                args.append("")
-        else:
-            args[-1]+=i
-    return args
 def insertFileIntoList(blist,ntoc):
     blist.append(";{ " + ntoc)
     insertIntoList(blist,readCodeFile(ntoc))
@@ -99,20 +92,3 @@ def insertIntoList(blist,code):
     ncompile = compileRec(code)
     for j in ncompile:
         blist.append(j)
-def findQuotedData(strt):
-    pos = 0
-    indata = ""
-    prevBak = False
-    inQuotes = False
-    for i in strt:
-        if prevBak:
-            if inQuotes:
-                indata+=i
-        else:
-            if i=="\"":
-                inQuotes = not(inQuotes)
-            else:
-                if inQuotes:
-                    indata+=i
-        pos+=1
-    return indata
