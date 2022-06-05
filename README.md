@@ -13,6 +13,7 @@ This project is at a very early stage so it might not have perfect compatibility
 
 - [x] Implement ```.INCLUDE```
 - [x] Implement ```.APPEND```
-- [ ] Implement ```.GLOBAL``` and collision resolution
+- [x] Implement collision resolution
+- [ ] Implement ```.GLOBAL```
 - [x] Implement ```.MACRO``` and ```.MACROEND```
 - [ ] Improve compiler comments
