@@ -17,6 +17,8 @@ def compile(filename):
     for i in appendd:
         insertFileIntoList(rslt,i)
     rslt.append(";end\nnoend:     STOP\n.END")
+    # Handle collision
+    resolveCollisions(rslt)
     # Exports
     nfile = ";compiled by python.pep91.v1\n"
     for i in rslt:
@@ -59,6 +61,41 @@ def compileRec(code):
                 ndata.append(line)
 
     return ndata
+colCount = 0
+def resolveCollisions(code):
+    global colCount
+    global colList
+    colCount = 0
+    colList = []
+    resolveCollisionsRec(code,0)
+def resolveCollisionsRec(code,starting):
+    global colCount
+    global colList
+    count = starting
+    localCollisions = {}
+    while len(code)>count and (len(code[count])<2 or code[count][:2]!=";}"):
+        if code[count][:2]==";{":
+            count+=1
+            count = resolveCollisionsRec(code,count)
+        else:
+            varName = extractVar(code[count])
+            if varName not in localCollisions:
+                if varName in colList:
+                    localCollisions[varName] = "ZZ"+str(colCount)
+                    colCount+=1
+                else:
+                    localCollisions[varName] = varName
+                    colList.append(varName)
+            code[count] = code[count].replace(varName,localCollisions[varName])
+        count+=1
+    return count
+def extractVar(cmdstr):
+    splitUp = splitArgs(cmdstr)
+    if len(splitUp[0])==0:
+        return ""
+    if splitUp[0][-1]==":":
+        return splitUp[0][:-1]
+    return ""
 def injectArguments(splitInst):
     global macroList
     macro = macroList[splitInst[0]]
