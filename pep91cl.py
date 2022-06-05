@@ -92,7 +92,7 @@ def resolveCollisionsRec(code,starting):
     return count
 def extractVar(cmdstr):
     splitUp = splitArgs(cmdstr)
-    if len(splitUp[0])==0:
+    if len(splitUp[0])==0 or splitUp[0][0]==";":
         return ""
     if splitUp[0][-1]==":":
         return splitUp[0][:-1]
