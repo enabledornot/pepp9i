@@ -48,11 +48,14 @@ def compileRec(code):
         elif split[0]==".END":
             ndata.append("     BR     noend")
         else:
+            pointer = ""
             if split[0][-1]==":":
-                split.pop(0)
+                pointer = split.pop(0)
             if split[0][0]!="." and not pep9check.instCheck(split[0]):
                 if split[0] in macroList:
                     injectedMacro = injectArguments(split)
+                    if pointer!="":
+                        ndata.append(pointer + "     NOP0;")
                     insertIntoList(ndata,injectedMacro)
                 else:
                     print("INVALID INSTRUCTION {}".format(split[0]))
