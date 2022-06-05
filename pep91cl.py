@@ -79,14 +79,15 @@ def resolveCollisionsRec(code,starting):
             count = resolveCollisionsRec(code,count)
         else:
             varName = extractVar(code[count])
-            if varName not in localCollisions:
-                if varName in colList:
-                    localCollisions[varName] = "ZZ"+str(colCount)
-                    colCount+=1
-                else:
-                    localCollisions[varName] = varName
-                    colList.append(varName)
-            code[count] = code[count].replace(varName,localCollisions[varName])
+            if varName!="":
+                if varName not in localCollisions:
+                    if varName in colList:
+                        localCollisions[varName] = "ZZ"+str(colCount)
+                        colCount+=1
+                    else:
+                        localCollisions[varName] = varName
+                        colList.append(varName)
+                code[count] = code[count].replace(varName,localCollisions[varName],1)
         count+=1
     return count
 def extractVar(cmdstr):
