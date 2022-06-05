@@ -44,7 +44,7 @@ def compileRec(code):
         elif split[0]==".APPEND":
             appendd.append(split[1][1:-1])
         elif split[0]==".GLOBAL":
-            continue
+            ndata.append(";"+line)
         elif split[0]==".END":
             ndata.append("     BR     noend")
         else:
