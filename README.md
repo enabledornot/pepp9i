@@ -3,7 +3,7 @@ Translates pep91 and pep92 programs into pep9
 
 My goal with this project is to make it easier to develop larger pep92 projects by improving the way external libraries are loaded.
 
-`.pep1' and '.pep2' files can be compiled using this command assuming you have all the included or appended files.
+'.pep1' and '.pep2' files can be compiled using this command assuming you have all the included or appended files.
 ```
 python pep91c.py filename.pep2
 ```
