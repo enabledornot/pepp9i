@@ -74,7 +74,6 @@ def resolveCollisions(code):
         split = splitArgs(i)
         if split[0]==".GLOBAL":
             colList.append(split[1])
-            print(split[1])
     resolveCollisionsRec(code,0)
 def resolveCollisionsRec(code,starting):
     global colCount
@@ -86,23 +85,62 @@ def resolveCollisionsRec(code,starting):
             count+=1
             count = resolveCollisionsRec(code,count)
         else:
-            varName = extractVar(code[count])
-            if varName!="":
-                if varName not in localCollisions:
-                    if varName in colList:
-                        localCollisions[varName] = "ZZ"+str(colCount)
-                        colCount+=1
-                    else:
-                        localCollisions[varName] = varName
-                        colList.append(varName)
-                code[count] = code[count].replace(varName,localCollisions[varName],1)
-            else:
-                split = splitArgs(code[count])
-                if split[0]==".GLOBAL":
-                    localCollisions[split[1]] = split[1]
-                    code[count] = ";" + code[count]
+            split = splitArgs(code[count])
+            if split[0]==".GLOBAL":
+                localCollisions[split[1]] = split[1]
+                code[count] = ";" + code[count]
+            vars = extractAllVars(code[count])
+            if len(vars)>0:
+                for varName in vars:
+                    print(varName)
+                    if varName not in localCollisions:
+                        if varName in colList:
+                            localCollisions[varName] = "ZZ"+str(colCount)
+                            colCount+=1
+                        else:
+                            localCollisions[varName] = varName
+                            colList.append(varName)
+                    code[count] = varReplace(code[count],varName,localCollisions[varName])
         count+=1
     return count
+def varReplace(command, mat, rep):
+    if mat==rep:
+        return command
+    print(command)
+    print(mat)
+    print(rep)
+    print("-")
+    split = splitArgs(command)
+    if len(split)==0:
+        return command
+    if split[0][-1]==":":
+        if split[0][:-1]==mat:
+            command = command.replace(split[0],rep+":")
+        split.pop(0)
+    if len(split)<2:
+        return command
+    newArgs = split[1].split(",")
+    if newArgs[0]==mat:
+        newArgs[0]=rep
+    command = command.replace(split[1],','.join(newArgs))
+    return command
+def extractAllVars(cmdStr):
+    split = splitArgs(cmdStr)
+    vars = []
+    if len(split)==0:
+        return vars
+    if len(split[0])==0:
+        return vars
+    if split[0][-1]==":":
+        vars.append(split[0][:-1])
+        split.pop(0)
+    if len(split)<2:
+        return vars
+    if split[1].split(",")[0].isdigit() or split[1][0]=="\"":
+        return vars
+    vars.append(split[1].split(",")[0])
+    return vars
+    
 def extractVar(cmdstr):
     splitUp = splitArgs(cmdstr)
     if len(splitUp[0])==0 or splitUp[0][0]==";":
