@@ -44,7 +44,7 @@ def compileRec(code):
         elif split[0]==".APPEND":
             appendd.append(split[1][1:-1])
         elif split[0]==".GLOBAL":
-            ndata.append(";"+line)
+            ndata.append(line)
         elif split[0]==".END":
             ndata.append("     BR     noend")
         else:
@@ -72,7 +72,7 @@ def resolveCollisions(code):
     colList = []
     for i in code:
         split = splitArgs(i)
-        if split[0]==";.GLOBAL":
+        if split[0]==".GLOBAL":
             colList.append(split[1])
             print(split[1])
     resolveCollisionsRec(code,0)
@@ -96,6 +96,11 @@ def resolveCollisionsRec(code,starting):
                         localCollisions[varName] = varName
                         colList.append(varName)
                 code[count] = code[count].replace(varName,localCollisions[varName],1)
+            else:
+                split = splitArgs(code[count])
+                if split[0]==".GLOBAL":
+                    localCollisions[split[1]] = split[1]
+                    code[count] = ";" + code[count]
         count+=1
     return count
 def extractVar(cmdstr):
