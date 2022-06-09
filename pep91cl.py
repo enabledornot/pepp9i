@@ -70,6 +70,11 @@ def resolveCollisions(code):
     global colList
     colCount = 0
     colList = []
+    for i in code:
+        split = splitArgs(i)
+        if split[0]==";.GLOBAL":
+            colList.append(split[1])
+            print(split[1])
     resolveCollisionsRec(code,0)
 def resolveCollisionsRec(code,starting):
     global colCount
