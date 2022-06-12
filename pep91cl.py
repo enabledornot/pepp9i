@@ -1,4 +1,5 @@
 # IMPORTS
+from threading import local
 from pep9lib import splitArgs
 import pep9check
 # GLOBAL VARS
@@ -93,11 +94,14 @@ def resolveCollisionsRec(code,starting):
                 code[count] = ";" + code[count]
             elif split[0][-1]==":":
                 varName = split[0][:-1]
-                print(varName)
+                # print(varName)
                 if varName not in localCollisions:
                     if varName in colList:
                         localCollisions[varName] = "ZZ"+str(colCount)
+                        # print(localCollisions[varName])
                         colCount+=1
+                    else:
+                        colList.append(varName)
             code[count] = smartReplace(code[count],localCollisions)
             # vars = extractAllVars(code[count])
             # if len(vars)>0:
@@ -121,12 +125,12 @@ def smartReplace(line,colList):
 def varReplace(command, mat, rep):
     if mat==rep:
         return command
-    print(command)
-    print(mat)
-    print(rep)
-    print("-")
+    # print(command)
+    # print(mat)
+    # print(rep)
+    # print("-")
     split = splitArgs(command)
-    if len(split)==0:
+    if len(split)==0 or len(split[0])==0:
         return command
     if split[0][-1]==":":
         if split[0][:-1]==mat:
@@ -166,7 +170,7 @@ def extractVar(cmdstr):
 def injectArguments(splitInst):
     global macroList
     macro = macroList[splitInst[0]]
-    macInst = macro["inst"]
+    macInst = macro["inst"].copy()
     if len(macro["args"])>0:
         macArgs = splitInst[1].split(",")
     cnt = 0
