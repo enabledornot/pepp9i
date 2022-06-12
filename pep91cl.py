@@ -94,27 +94,13 @@ def resolveCollisionsRec(code,starting):
                 code[count] = ";" + code[count]
             elif split[0][-1]==":":
                 varName = split[0][:-1]
-                # print(varName)
                 if varName not in localCollisions:
                     if varName in colList:
                         localCollisions[varName] = "ZZ"+str(colCount)
-                        # print(localCollisions[varName])
                         colCount+=1
                     else:
                         colList.append(varName)
             code[count] = smartReplace(code[count],localCollisions)
-            # vars = extractAllVars(code[count])
-            # if len(vars)>0:
-            #     for varName in vars:
-            #         print(varName)
-            #         if varName not in localCollisions:
-            #             if varName in colList:
-            #                 localCollisions[varName] = "ZZ"+str(colCount)
-            #                 colCount+=1
-            #             else:
-            #                 localCollisions[varName] = varName
-            #                 colList.append(varName)
-            #         code[count] = varReplace(code[count],varName,localCollisions[varName])
         count+=1
     return count
 def smartReplace(line,colList):
@@ -125,10 +111,6 @@ def smartReplace(line,colList):
 def varReplace(command, mat, rep):
     if mat==rep:
         return command
-    # print(command)
-    # print(mat)
-    # print(rep)
-    # print("-")
     split = splitArgs(command)
     if len(split)==0 or len(split[0])==0:
         return command
@@ -143,23 +125,6 @@ def varReplace(command, mat, rep):
         newArgs[0]=rep
     command = command.replace(split[1],','.join(newArgs))
     return command
-def extractAllVars(cmdStr):
-    split = splitArgs(cmdStr)
-    vars = []
-    if len(split)==0:
-        return vars
-    if len(split[0])==0:
-        return vars
-    if split[0][-1]==":":
-        vars.append(split[0][:-1])
-        split.pop(0)
-    if len(split)<2:
-        return vars
-    if split[1].split(",")[0].isdigit() or split[1][0]=="\"":
-        return vars
-    vars.append(split[1].split(",")[0])
-    return vars
-    
 def extractVar(cmdstr):
     splitUp = splitArgs(cmdstr)
     if len(splitUp[0])==0 or splitUp[0][0]==";":
