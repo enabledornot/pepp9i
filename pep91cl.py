@@ -86,23 +86,38 @@ def resolveCollisionsRec(code,starting):
             count = resolveCollisionsRec(code,count)
         else:
             split = splitArgs(code[count])
-            if split[0]==".GLOBAL":
+            if len(split[0])==0 or split[0][0]==";":
+                None
+            elif split[0]==".GLOBAL":
                 localCollisions[split[1]] = split[1]
                 code[count] = ";" + code[count]
-            vars = extractAllVars(code[count])
-            if len(vars)>0:
-                for varName in vars:
-                    print(varName)
-                    if varName not in localCollisions:
-                        if varName in colList:
-                            localCollisions[varName] = "ZZ"+str(colCount)
-                            colCount+=1
-                        else:
-                            localCollisions[varName] = varName
-                            colList.append(varName)
-                    code[count] = varReplace(code[count],varName,localCollisions[varName])
+            elif split[0][-1]==":":
+                varName = split[0][:-1]
+                print(varName)
+                if varName not in localCollisions:
+                    if varName in colList:
+                        localCollisions[varName] = "ZZ"+str(colCount)
+                        colCount+=1
+            code[count] = smartReplace(code[count],localCollisions)
+            # vars = extractAllVars(code[count])
+            # if len(vars)>0:
+            #     for varName in vars:
+            #         print(varName)
+            #         if varName not in localCollisions:
+            #             if varName in colList:
+            #                 localCollisions[varName] = "ZZ"+str(colCount)
+            #                 colCount+=1
+            #             else:
+            #                 localCollisions[varName] = varName
+            #                 colList.append(varName)
+            #         code[count] = varReplace(code[count],varName,localCollisions[varName])
         count+=1
     return count
+def smartReplace(line,colList):
+    rep = line
+    for i in colList:
+        rep = varReplace(rep,i,colList[i])
+    return rep
 def varReplace(command, mat, rep):
     if mat==rep:
         return command
