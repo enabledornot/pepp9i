@@ -21,3 +21,13 @@ This project is at a very early stage so it does not have perfect compatibility 
 - [ ] Fix formatting on output code
 - [ ] Add external library support
 - [ ] Improve code quality
+
+**Syntax**
+
+|Symbol|Example|Description|
+| --- | --- | --- |
+|```.INCLUDE```|```.INCLUDE    "macros.pep2"```|Inserts file right there|
+|```.APPEND```|```.APPEND    "heap.pep2"```|Appends file to end|
+|```.GLOBAL```|```.GLOBAL    strLen```|Defines variable as global|
+|```.MACRO```|```.MACRO    DECO    5,stx```|Begins macro
+|```.MACROEND```|```.MACROEND```|Ends macro
