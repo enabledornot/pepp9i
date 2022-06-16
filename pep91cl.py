@@ -15,8 +15,8 @@ def compile(filename):
     # Compiles code with appends and includes
     rslt = compileRec(readCodeFile(filename))
     rslt.append(";begin append")
-    for i in appendd:
-        insertFileIntoList(rslt,i)
+    while len(appendd)!=0:
+        insertFileIntoList(rslt,appendd.pop(0))
     rslt.append(";end\nnoend:     STOP\n.END")
     # Handle collision
     resolveCollisions(rslt)
