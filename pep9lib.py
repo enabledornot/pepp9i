@@ -31,7 +31,7 @@ def findQuotedData(strt):
 def formatFix(codeList,space=[10,10,10]):
     count = 0
     while len(codeList)>count:
-        codeList[count] = formatLine(codeList[count],space=[10,10,10])
+        codeList[count] = formatLine(codeList[count],space=space)
         count+=1
 def formatLine(codeLine,space=[10,10,10]):
     if len(codeLine)==0 or codeLine[0]==";":
