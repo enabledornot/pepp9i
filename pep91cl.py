@@ -1,6 +1,6 @@
 # IMPORTS
 from threading import local
-from pep9lib import splitArgs
+from pep9lib import splitArgs,formatFix
 import pep9check
 # GLOBAL VARS
 appendd = []
@@ -22,6 +22,8 @@ def compile(filename):
     rslt.append(";end\nnoend:     STOP\n.END")
     # Handle collision
     resolveCollisions(rslt)
+    # Fix formatting
+    formatFix(rslt,space=[10,10,10])
     # Exports
     nfile = ";compiled by python.pep91.v1\n"
     for i in rslt:
