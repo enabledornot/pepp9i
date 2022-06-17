@@ -10,8 +10,10 @@ def compile(filename):
     # resets global variables
     global appendd
     global macroList
+    global prevFiles
     appendd = []
     macroList = {}
+    prevFiles = []
     # Compiles code with appends and includes
     rslt = compileRec(readCodeFile(filename))
     rslt.append(";begin append")
@@ -27,6 +29,10 @@ def compile(filename):
     with open("PEPP.pep","w") as f:
         f.write(nfile)
 def readCodeFile(filename):
+    global prevFiles
+    if filename in prevFiles:
+        return []
+    prevFiles.append(filename)
     with open(filename,"r") as f:
         rdata = f.read().split("\n")
     return rdata
