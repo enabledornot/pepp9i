@@ -34,6 +34,14 @@ def formatFix(codeList,space=[10,10,10]):
         codeList[count] = formatLine(codeList[count],space=[10,10,10])
         count+=1
 def formatLine(codeLine,space=[10,10,10]):
+    if len(codeLine)==0 or codeLine[0]==";":
+        return codeLine
+    lineSplit = codeLine.split(";",1)
+    codeLine = lineSplit[0]
+    if len(lineSplit)==1:
+        comLine = ""
+    else:
+        comLine = ";"+lineSplit[1]
     split = splitArgs(codeLine)
     if len(split)<2:
         return codeLine
@@ -44,6 +52,6 @@ def formatLine(codeLine,space=[10,10,10]):
         if count!=len(space)-1:
             count+=1
     newLine+=split[-1]
-    return newLine
+    return newLine + comLine
 def pad(stri,leng,chart=' '):
     return stri + (leng-len(stri))*chart
