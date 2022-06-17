@@ -25,3 +25,22 @@ def findQuotedData(strt):
                     indata+=i
         pos+=1
     return indata
+def formatFix(codeList,space=[10,10,10]):
+    count = 0
+    while len(codeList)>count:
+        codeList[count] = formatLine(codeList[count],space=[10,10,10])
+        count+=1
+def formatLine(codeLine,space=[10,10,10]):
+    split = splitArgs(codeLine)
+    if len(split)<2:
+        return codeLine
+    newLine = ""
+    count = 0
+    for i in split[:-1]:
+        newLine+=pad(i,space[count])
+        if count!=len(space)-1:
+            count+=1
+    newLine+=split[-1]
+    return newLine
+def pad(stri,leng,chart=' '):
+    return stri + (leng-len(stri))*chart
