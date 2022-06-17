@@ -1,9 +1,12 @@
 # General library for dealing with pep9 assembly in python
 def splitArgs(stri):
     args = [""]
+    inQuotes = False
     for i in stri:
-        if i==" ":
-            if args[-1]!="":
+        if i=="\"":
+            inQuotes = not(inQuotes)
+        elif i==" ":
+            if args[-1]!="" and not(inQuotes):
                 args.append("")
         else:
             args[-1]+=i
