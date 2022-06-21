@@ -5,8 +5,14 @@ def cleanUp(string):
     nblock = []
     for i in block:
         if len(i)!=0 and i[0]!=" ":
-            nblock.append(i)
+            nblock.append(removeCom(i))
     return nblock
+def removeCom(string):
+    split = string.split(";",1)
+    if len(split)==1:
+        return string
+    else:
+        return split[0]
 def compare(string0,string1):
     clean0 = cleanUp(string0)
     clean1 = cleanUp(string1)
