@@ -110,6 +110,12 @@ def resolveCollisionsRec(code,starting):
                         colList.append(varName)
             code[count] = smartReplace(code[count],localCollisions)
         count+=1
+    code[count-1] = ""
+    for i in localCollisions:
+        if i!=localCollisions[i]:
+            code[count-1]+=";;{} -> {}\n".format(i,localCollisions[i])
+    if len(code[count-1])!=0:
+        code[count-1] = ";;Collisions\n"+code[count-1]
     return count
 def smartReplace(line,colList):
     rep = line
