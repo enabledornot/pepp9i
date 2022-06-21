@@ -49,9 +49,9 @@ def compileRec(code):
             ndata.append(line)
             continue
         if split[0]==".INCLUDE":
-            insertFileIntoList(ndata, split[1])
+            insertFileIntoList(ndata, split[1][1:-1])
         elif split[0]==".APPEND":
-            appendd.append(split[1])
+            appendd.append(split[1][1:-1])
         elif split[0]==".GLOBAL":
             ndata.append(line)
         elif split[0]==".END":
