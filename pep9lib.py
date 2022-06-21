@@ -5,8 +5,8 @@ def splitArgs(stri):
     for i in stri:
         if i=="\"":
             inQuotes = not(inQuotes)
-        if i==" ":
-            if args[-1]!="" and not(inQuotes):
+        if i==" " and not(inQuotes):
+            if args[-1]!="":
                 args.append("")
         else:
             args[-1]+=i
