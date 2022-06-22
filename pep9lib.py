@@ -16,6 +16,15 @@ def getRef(cmd):
     if split[0][-1]==":":
         return split[0][:-1]
     return ""
+def getInst(cmd):
+    split = splitArgs(cmd)
+    if len(split)==0 or len(split[0])==0:
+        return ""
+    if split[0][-1]==":":
+        split.pop(0)
+    if len(split)==0:
+        return ""
+    return split[1]
 def getArgs(cmd):
     split = splitArgs(cmd)
     if len(split)==0 or len(split[0])==0:
