@@ -1,7 +1,7 @@
 # IMPORTS
 from concurrent.futures.thread import _global_shutdown_lock
 from threading import local
-from pep9lib import *
+import pep9lib
 import pep9check
 # GLOBAL VARS
 appendd = []
@@ -23,7 +23,7 @@ def compile(filename):
     rslt.append(";end\nnoend:     STOP\n.END")
     # Handle collision
     # Fix formatting
-    formatFix(rslt,space=[10,10,10])
+    pep9lib.formatFix(rslt,space=[10,10,10])
     # Exports
     nfile = ";compiled by python.pep91.v1\n"
     for i in rslt:
@@ -44,7 +44,7 @@ def compileRec(code):
     fdata = extractMacros(code)
     ndata = []
     for line in fdata:
-        split = splitArgs(line)
+        split = pep9lib.splitArgs(line)
         if len(split[0])==0 or split[0][0]==";":
             ndata.append(line)
             continue
@@ -82,7 +82,7 @@ def smartReplace(line,colList):
 def varReplace(command, mat, rep):
     if mat==rep or command=="" or command[0]==";":
         return command
-    split = splitArgs(command)
+    split = pep9lib.splitArgs(command)
     if len(split)==0 or len(split[0])==0:
         return command
     if split[0][-1]==":":
@@ -97,7 +97,7 @@ def varReplace(command, mat, rep):
     command = command.replace(split[1],','.join(newArgs))
     return command
 def extractVar(cmdstr):
-    splitUp = splitArgs(cmdstr)
+    splitUp = pep9lib.splitArgs(cmdstr)
     if len(splitUp[0])==0 or splitUp[0][0]==";":
         return ""
     if splitUp[0][-1]==":":
@@ -122,7 +122,7 @@ def extractMacros(fdata):
     macroArgs = []
     nfdata = []
     for line in fdata:
-        split = splitArgs(line)
+        split = pep9lib.splitArgs(line)
         if split[0]==".MACRO":
             macroName = split[1]
             if len(split)>2:
