@@ -1,6 +1,7 @@
 # IMPORTS
+from concurrent.futures.thread import _global_shutdown_lock
 from threading import local
-from pep9lib import splitArgs,formatFix
+from pep9lib import *
 import pep9check
 # GLOBAL VARS
 appendd = []
@@ -77,16 +78,19 @@ colCount = 0
 def resolveCollisions(code):
     global colCount
     global colList
+    global globals
     colCount = 0
     colList = []
+    globals = []
     for i in code:
         split = splitArgs(i)
         if split[0]==".GLOBAL":
-            colList.append(split[1])
+            globals.append(split[1])
     resolveCollisionsRec(code,0)
 def resolveCollisionsRec(code,starting):
     global colCount
     global colList
+    global globals
     count = starting
     localCollisions = {}
     while len(code)>count and (len(code[count])<2 or code[count][:2]!=";}"):
@@ -97,17 +101,33 @@ def resolveCollisionsRec(code,starting):
             split = splitArgs(code[count])
             if len(split[0])==0 or split[0][0]==";":
                 None
-            elif split[0]==".GLOBAL":
-                localCollisions[split[1]] = split[1]
-                code[count] = ";" + code[count]
-            elif split[0][-1]==":":
-                varName = split[0][:-1]
-                if varName not in localCollisions:
-                    if varName in colList:
-                        localCollisions[varName] = "ZZ"+str(colCount)
-                        colCount+=1
-                    else:
-                        colList.append(varName)
+            else:
+                if split[0]==".GLOBAL":
+                    localCollisions[split[1]] = split[1]
+                    code[count] = ";" + code[count]
+                ref = getRef(code[count])
+                if ref!="":
+                    if ref not in localCollisions:
+                        if varName in globals:
+                            print("error {} defined when already defined in global".format(ref))
+                        else:
+                            if ref in colList:
+                                localCollisions[ref] = "ZZ"+str(colCount)
+                                colCount+=1
+                            else:
+                                colList.append(ref)
+                arg = getArgs(code[count])[0]
+                if arg!="":
+                    if not arg in globals:
+                        
+                for var in vars:
+                    varName = var
+                    if varName not in localCollisions:
+                        if varName in colList:
+                            localCollisions[varName] = "ZZ"+str(colCount)
+                            colCount+=1
+                        else:
+                            colList.append(varName)
             code[count] = smartReplace(code[count],localCollisions)
         count+=1
     code[count-1] = ""
@@ -123,7 +143,7 @@ def smartReplace(line,colList):
         rep = varReplace(rep,i,colList[i])
     return rep
 def varReplace(command, mat, rep):
-    if mat==rep:
+    if mat==rep or command=="" or command[0]==";":
         return command
     split = splitArgs(command)
     if len(split)==0 or len(split[0])==0:
