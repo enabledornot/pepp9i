@@ -22,7 +22,6 @@ def compile(filename):
         insertFileIntoList(rslt,appendd.pop(0))
     rslt.append(";end\nnoend:     STOP\n.END")
     # Handle collision
-    resolveCollisions(rslt)
     # Fix formatting
     formatFix(rslt,space=[10,10,10])
     # Exports
@@ -75,68 +74,6 @@ def compileRec(code):
 
     return ndata
 colCount = 0
-def resolveCollisions(code):
-    global colCount
-    global colList
-    global globals
-    colCount = 0
-    colList = []
-    globals = []
-    for i in code:
-        split = splitArgs(i)
-        if split[0]==".GLOBAL":
-            globals.append(split[1])
-    resolveCollisionsRec(code,0)
-def resolveCollisionsRec(code,starting):
-    global colCount
-    global colList
-    global globals
-    count = starting
-    localCollisions = {}
-    while len(code)>count and (len(code[count])<2 or code[count][:2]!=";}"):
-        if code[count][:2]==";{":
-            count+=1
-            count = resolveCollisionsRec(code,count)
-        else:
-            split = splitArgs(code[count])
-            if len(split[0])==0 or split[0][0]==";":
-                None
-            else:
-                if split[0]==".GLOBAL":
-                    localCollisions[split[1]] = split[1]
-                    code[count] = ";" + code[count]
-                ref = getRef(code[count])
-                if ref!="":
-                    if ref not in localCollisions:
-                        if varName in globals:
-                            print("error {} defined when already defined in global".format(ref))
-                        else:
-                            if ref in colList:
-                                localCollisions[ref] = "ZZ"+str(colCount)
-                                colCount+=1
-                            else:
-                                colList.append(ref)
-                arg = getArgs(code[count])[0]
-                if arg!="":
-                    if not arg in globals:
-                        
-                for var in vars:
-                    varName = var
-                    if varName not in localCollisions:
-                        if varName in colList:
-                            localCollisions[varName] = "ZZ"+str(colCount)
-                            colCount+=1
-                        else:
-                            colList.append(varName)
-            code[count] = smartReplace(code[count],localCollisions)
-        count+=1
-    code[count-1] = ""
-    for i in localCollisions:
-        if i!=localCollisions[i]:
-            code[count-1]+=";;{} -> {}\n".format(i,localCollisions[i])
-    if len(code[count-1])!=0:
-        code[count-1] = ";;Collisions\n"+code[count-1]
-    return count
 def smartReplace(line,colList):
     rep = line
     for i in colList:
