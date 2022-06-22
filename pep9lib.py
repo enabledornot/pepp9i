@@ -28,11 +28,11 @@ def getInst(cmd):
 def getArgs(cmd):
     split = splitArgs(cmd)
     if len(split)==0 or len(split[0])==0:
-        return ""
+        return []
     if split[0][-1]==":":
         split.pop(0)
     if len(split)<=1:
-        return ""
+        return []
     return split[1].split(",")
 def findQuotedData(strt):
     pos = 0
@@ -85,3 +85,8 @@ def removeComments(stri):
             return nstri
         nstri+=i
     return nstri
+def getComments(stri):
+    loc = stri.find(";")
+    if loc==-1:
+        return ""
+    return stri[loc:]
