@@ -11,6 +11,20 @@ def splitArgs(stri):
         else:
             args[-1]+=i
     return args
+def getRef(cmd):
+    split = splitArgs(cmd)
+    if split[0][-1]==":":
+        return split[0][:-1]
+    return ""
+def getArgs(cmd):
+    split = splitArgs(cmd)
+    if len(split)==0 or len(split[0])==0:
+        return ""
+    if split[0][-1]==":":
+        split.pop(0)
+    if len(split)<=1:
+        return ""
+    return split[1].split(",")
 def findQuotedData(strt):
     pos = 0
     indata = ""
