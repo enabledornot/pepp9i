@@ -55,3 +55,10 @@ def formatLine(codeLine,space=[10,10,10]):
     return newLine + comLine
 def pad(stri,leng,chart=' '):
     return stri + (leng-len(stri))*chart
+def removeComments(stri):
+    nstri = ""
+    for i in stri:
+        if i == ";":
+            return nstri
+        nstri+=i
+    return nstri
