@@ -13,6 +13,17 @@ def resolveCollisions(code):
             split = pep9lib.splitArgs(ii)
             if split[0]==".GLOBAL":
                 globalVars.append(split[1])
+    resolveCollisionsRec(newCMD,0)
+def resolveCollisionsRec(code,lineNumb):
+    count = lineNumb
+    while len(code)>count and not code[count].getBeginCom()=="}":
+        if code[count].getBeginCom()=="{":
+            count = resolveCollisionsRec(code,count+1)
+        else:
+            None
+            # print(code[count])
+        count+=1
+    return count
 class command:
     def __init__(self,stri):
         self.pointer = pep9lib.getRef(stri)
@@ -25,6 +36,14 @@ class command:
         if self.pointer=="":
             return False
         return True
+    def hasArgs(self):
+        if len(self.args)==0:
+            return False
+        return True
+    def getBeginCom(self):
+        if len(self.com)<2:
+            return ""
+        return self.com[1]
     def rebuild(self):
         newStr = ""
         if self.pointer!="":
