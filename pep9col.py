@@ -21,13 +21,25 @@ def resolveCollisions(code):
 def resolveCollisionsRec(code,lineNumb):
     count = lineNumb
     localVars = {}
+    resolveAhead(code,count,localVars)
     while len(code)>count and not code[count].getBeginCom()=="}":
         if code[count].getBeginCom()=="{":
             count = resolveCollisionsRec(code,count+1)
         else:
-            resolveLine(code[count],localVars)
+            resolveLineArgs(code[count],localVars)
         count+=1
     return count
+def resolveAhead(code,count,localVars):
+    window = 0
+    for line in code[count:]:
+        if line.getBeginCom()=="{":
+            window+=1
+        if line.getBeginCom()=="}":
+            window-=1
+        if window==0:
+            resolveLine(line,localVars)
+        if window==-1:
+            break
 def resolveLine(command,localVars):
     global usedVars
     global globalVars
@@ -40,6 +52,7 @@ def resolveLine(command,localVars):
                 colCount+=1
             else:
                 usedVars.append(command.pointer)
+def resolveLineArgs(command,localVars):
     for i in range(len(command.args)):
         if command.args[i] in localVars:
             command.args[i] = localVars[command.args[i]]
