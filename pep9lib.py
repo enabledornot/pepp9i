@@ -1,5 +1,4 @@
 # General library for dealing with pep9 assembly in python
-from os import remove
 
 
 def splitArgs(stri):
