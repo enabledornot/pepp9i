@@ -3,6 +3,7 @@ from concurrent.futures.thread import _global_shutdown_lock
 from threading import local
 import pep9lib
 import pep9check
+from pep9col import resolveCollisions
 # GLOBAL VARS
 appendd = []
 macroList = {}
@@ -20,8 +21,11 @@ def compile(filename):
     rslt.append(";begin append")
     while len(appendd)!=0:
         insertFileIntoList(rslt,appendd.pop(0))
-    rslt.append(";end\nnoend:     STOP\n.END")
+    rslt.append(";end")
+    rslt.append("noend:     STOP")
+    rslt.append(".END")
     # Handle collision
+    resolveCollisions(rslt)
     # Fix formatting
     pep9lib.formatFix(rslt,space=[10,10,10])
     # Exports
@@ -74,28 +78,6 @@ def compileRec(code):
 
     return ndata
 colCount = 0
-def smartReplace(line,colList):
-    rep = line
-    for i in colList:
-        rep = varReplace(rep,i,colList[i])
-    return rep
-def varReplace(command, mat, rep):
-    if mat==rep or command=="" or command[0]==";":
-        return command
-    split = pep9lib.splitArgs(command)
-    if len(split)==0 or len(split[0])==0:
-        return command
-    if split[0][-1]==":":
-        if split[0][:-1]==mat:
-            command = command.replace(split[0],rep+":")
-        split.pop(0)
-    if len(split)<2:
-        return command
-    newArgs = split[1].split(",")
-    if newArgs[0]==mat:
-        newArgs[0]=rep
-    command = command.replace(split[1],','.join(newArgs))
-    return command
 def extractVar(cmdstr):
     splitUp = pep9lib.splitArgs(cmdstr)
     if len(splitUp[0])==0 or splitUp[0][0]==";":

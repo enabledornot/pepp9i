@@ -10,20 +10,39 @@ def resolveCollisions(code):
     for i in code:
         for ii in i.split("\n"):
             newCMD.append(command(ii))
-            split = pep9lib.splitArgs(ii)
-            if split[0]==".GLOBAL":
-                globalVars.append(split[1])
+            print(newCMD[-1])
+            if newCMD[-1].inst==".GLOBAL":
+                globalVars.append(newCMD[-1].args[0])
+                newCMD[-1] = command(";"+ii)
+    print(globalVars)
     resolveCollisionsRec(newCMD,0)
+    for i in range(len(code)):
+        code[i] = newCMD[i].__str__()
 def resolveCollisionsRec(code,lineNumb):
     count = lineNumb
+    localVars = {}
     while len(code)>count and not code[count].getBeginCom()=="}":
         if code[count].getBeginCom()=="{":
             count = resolveCollisionsRec(code,count+1)
         else:
-            None
-            # print(code[count])
+            resolveLine(code[count],localVars)
         count+=1
     return count
+def resolveLine(command,localVars):
+    global usedVars
+    global globalVars
+    global colCount
+    if command.pointer!="":
+        if (command.pointer not in globalVars):
+            if(command.pointer in usedVars):
+                localVars[command.pointer] = "ZZ"+str(colCount)
+                command.pointer = localVars[command.pointer]
+                colCount+=1
+            else:
+                usedVars.append(command.pointer)
+    for i in range(len(command.args)):
+        if command.args[i] in localVars:
+            command.args[i] = localVars[command.args[i]]
 class command:
     def __init__(self,stri):
         self.pointer = pep9lib.getRef(stri)

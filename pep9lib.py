@@ -1,4 +1,7 @@
 # General library for dealing with pep9 assembly in python
+from os import remove
+
+
 def splitArgs(stri):
     args = [""]
     inQuotes = False
@@ -12,6 +15,7 @@ def splitArgs(stri):
             args[-1]+=i
     return args
 def getRef(cmd):
+    cmd = removeComments(cmd)
     split = splitArgs(cmd)
     if len(split)==0 or len(split[0])==0:
         return ""
@@ -19,15 +23,15 @@ def getRef(cmd):
         return split[0][:-1]
     return ""
 def getInst(cmd):
+    cmd = removeComments(cmd)
     split = splitArgs(cmd)
     if len(split)==0 or len(split[0])==0:
         return ""
     if split[0][-1]==":":
         split.pop(0)
-    if len(split)==1:
-        return ""
-    return split[1]
+    return split[0]
 def getArgs(cmd):
+    cmd = removeComments(cmd)
     split = splitArgs(cmd)
     if len(split)==0 or len(split[0])==0:
         return []
@@ -35,7 +39,10 @@ def getArgs(cmd):
         split.pop(0)
     if len(split)<=1:
         return []
-    return split[1].split(",")
+    splits = split[1].split(",")
+    if "" in splits:
+        splits.remove("")
+    return splits
 def findQuotedData(strt):
     pos = 0
     indata = ""
@@ -91,4 +98,6 @@ def getComments(stri):
     loc = stri.find(";")
     if loc==-1:
         return ""
+    if loc==0:
+        return stri
     return stri[loc:]
