@@ -102,10 +102,10 @@ def getComments(stri):
     return stri[loc:]
 class command:
     def __init__(self,stri):
-        self.pointer = pep9lib.getRef(stri)
-        self.inst = pep9lib.getInst(stri)
-        self.args = pep9lib.getArgs(stri)
-        self.com = pep9lib.getComments(stri)
+        self.pointer = getRef(stri)
+        self.inst = getInst(stri)
+        self.args = getArgs(stri)
+        self.com = getComments(stri)
     def __str__(self):
         return self.rebuild()
     def isPoint(self):
