@@ -100,3 +100,34 @@ def getComments(stri):
     if loc==0:
         return stri
     return stri[loc:]
+class command:
+    def __init__(self,stri):
+        self.pointer = pep9lib.getRef(stri)
+        self.inst = pep9lib.getInst(stri)
+        self.args = pep9lib.getArgs(stri)
+        self.com = pep9lib.getComments(stri)
+    def __str__(self):
+        return self.rebuild()
+    def isPoint(self):
+        if self.pointer=="":
+            return False
+        return True
+    def hasArgs(self):
+        if len(self.args)==0:
+            return False
+        return True
+    def getBeginCom(self):
+        if len(self.com)<2:
+            return ""
+        return self.com[1]
+    def rebuild(self):
+        newStr = ""
+        if self.pointer!="":
+            newStr+=self.pointer + ": "
+        if self.inst!="":
+            newStr+=self.inst + " "
+        if len(self.args)!=0:
+            newStr+=",".join(self.args) + " "
+        if self.com!="":
+            newStr+=self.com
+        return newStr

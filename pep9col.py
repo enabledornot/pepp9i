@@ -9,11 +9,11 @@ def resolveCollisions(code):
     newCMD = []
     for i in code:
         for ii in i.split("\n"):
-            newCMD.append(command(ii))
+            newCMD.append(pep9lib.command(ii))
             print(newCMD[-1])
             if newCMD[-1].inst==".GLOBAL":
                 globalVars.append(newCMD[-1].args[0])
-                newCMD[-1] = command(";"+ii)
+                newCMD[-1] = pep9lib.command(";"+ii)
     print(globalVars)
     resolveCollisionsRec(newCMD,0)
     for i in range(len(code)):
@@ -56,34 +56,4 @@ def resolveLineArgs(command,localVars):
     for i in range(len(command.args)):
         if command.args[i] in localVars:
             command.args[i] = localVars[command.args[i]]
-class command:
-    def __init__(self,stri):
-        self.pointer = pep9lib.getRef(stri)
-        self.inst = pep9lib.getInst(stri)
-        self.args = pep9lib.getArgs(stri)
-        self.com = pep9lib.getComments(stri)
-    def __str__(self):
-        return self.rebuild()
-    def isPoint(self):
-        if self.pointer=="":
-            return False
-        return True
-    def hasArgs(self):
-        if len(self.args)==0:
-            return False
-        return True
-    def getBeginCom(self):
-        if len(self.com)<2:
-            return ""
-        return self.com[1]
-    def rebuild(self):
-        newStr = ""
-        if self.pointer!="":
-            newStr+=self.pointer + ": "
-        if self.inst!="":
-            newStr+=self.inst + " "
-        if len(self.args)!=0:
-            newStr+=",".join(self.args) + " "
-        if self.com!="":
-            newStr+=self.com
-        return newStr
+
