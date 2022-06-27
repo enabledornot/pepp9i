@@ -18,12 +18,12 @@ def compile(filename):
     prevFiles = []
     # Compiles code with appends and includes
     rslt = compileRec(readCodeFile(filename))
-    rslt.append(";begin append")
+    rslt.append(pep9lib.command(";begin append"))
     while len(appendd)!=0:
         insertFileIntoList(rslt,appendd.pop(0))
-    rslt.append(";end")
-    rslt.append("noend:     STOP")
-    rslt.append(".END")
+    rslt.append(pep9lib.command(";end"))
+    rslt.append(pep9lib.command("noend:     STOP"))
+    rslt.append(pep9lib.command(".END"))
     # Handle collision
     resolveCollisions(rslt)
     # Fix formatting
@@ -63,7 +63,7 @@ def compileRec(code):
         elif line.inst==".GLOBAL":
             ndata.append(line)
         elif line.inst==".END":
-            ndata.append("     BR     noend")
+            ndata.append(pep9lib.command("     BR     noend"))
         else:
             pointer = ""
             # if split[0][-1]==":":
@@ -131,9 +131,9 @@ def extractMacros(fdata):
                 macroInstructions.append(line)
     return nfdata
 def insertFileIntoList(blist,ntoc):
-    blist.append(";{ " + ntoc)
+    blist.append(pep9lib.command(";{ " + ntoc))
     insertIntoList(blist,readCodeFile(ntoc))
-    blist.append(";} " + ntoc)
+    blist.append(pep9lib.command(";} " + ntoc))
 def insertIntoList(blist,code):
     ncompile = compileRec(code)
     for j in ncompile:
