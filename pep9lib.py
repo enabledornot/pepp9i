@@ -112,6 +112,7 @@ class command:
         self.inst = getInst(stri)
         self.args = getArgs(stri)
         self.com = getComments(stri)
+        self.comLineAfter = False
     def __str__(self):
         return self.rebuild()
     def isPoint(self):
@@ -147,6 +148,8 @@ class command:
         return new
     def formatLine(self,space=[10,10,10]):
         newLine = ""
+        if self.comLineAfter:
+            newLine = ";"
         count = 0
         if self.pointer!="":
             newLine+=pad(self.pointer+":",space[count])
