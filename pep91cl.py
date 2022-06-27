@@ -43,7 +43,7 @@ def readCodeFile(filename):
         rdata = f.read().split("\n")
     ncode = []
     for i in rdata:
-        ncode.append(pep9lib.command(ncode))
+        ncode.append(pep9lib.command(i))
     return ncode
 def compileRec(code):
     global appendd
