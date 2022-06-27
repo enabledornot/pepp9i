@@ -134,3 +134,8 @@ class command:
         if self.com!="":
             newStr+=self.com
         return newStr
+    def replace(self,replace,replacement):
+        for i in range(len(self.args)):
+            for ii in range(len(self.args[i])):
+                if self.args[i][ii]==replace:
+                    self.args[i][ii] = replacement
