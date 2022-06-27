@@ -38,10 +38,13 @@ def getArgs(cmd):
         split.pop(0)
     if len(split)<=1:
         return []
-    splits = split[1].split(",")
-    if "" in splits:
-        splits.remove("")
-    return splits
+    args = []
+    for i in split[1:]:
+        splits = i.split(",")
+        if "" in splits:
+            splits.remove("")
+        args.append(splits)
+    return args
 def findQuotedData(strt):
     pos = 0
     indata = ""
