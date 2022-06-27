@@ -17,10 +17,7 @@ def compile(filename):
     macroList = {}
     prevFiles = []
     # Compiles code with appends and includes
-    startingCode = []
-    for i in filename:
-        startingCode.append(pep9lib.command(i))
-    rslt = compileRec(readCodeFile(startingCode))
+    rslt = compileRec(readCodeFile(filename))
     rslt.append(";begin append")
     while len(appendd)!=0:
         insertFileIntoList(rslt,appendd.pop(0))
@@ -44,7 +41,10 @@ def readCodeFile(filename):
     prevFiles.append(filename)
     with open(filename,"r") as f:
         rdata = f.read().split("\n")
-    return rdata
+    ncode = []
+    for i in rdata:
+        ncode.append(pep9lib.command(ncode))
+    return ncode
 def compileRec(code):
     global appendd
     global macroList
