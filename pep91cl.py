@@ -56,12 +56,11 @@ def compileRec(code):
         elif line.inst==".END":
             ndata.append(pep9lib.command("     BR     noend"))
         else:
-            pointer = ""
             if len(line.inst)!=0 and line.inst[0]!="." and not pep9check.instCheck(line.inst):
                 if line.inst in macroList:
                     injectedMacro = injectArguments(line)
-                    if pointer!="":
-                        ndata.append(pointer + "     NOP0;")
+                    if line.pointer!="":
+                        ndata.append(pep9lib.command(line.pointer+":" + "     NOP0;"))
                     insertIntoList(ndata,injectedMacro)
                 else:
                     print("INVALID INSTRUCTION {}".format(line.inst))
