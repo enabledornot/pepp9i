@@ -55,7 +55,10 @@ def resolveLine(command,localVars):
             else:
                 usedVars.append(command.pointer)
 def resolveLineArgs(command,localVars):
-    for i in range(len(command.args)):
-        if command.args[i] in localVars:
-            command.args[i] = localVars[command.args[i]]
+    if len(command.args)==0:
+        return
+    arguments = command.args[0]
+    for i in range(len(arguments)):
+        if arguments[i] in localVars:
+            arguments[i] = localVars[arguments[i]]
 
