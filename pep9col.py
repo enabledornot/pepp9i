@@ -8,6 +8,7 @@ def resolveCollisions(code):
     colCount = 0
     for line in code:
         if line.inst==".GLOBAL":
+            line.comLineAfter = True
             globalVars.append(line.args[0][0])
     resolveCollisionsRec(code,0)
 def resolveCollisionsRec(code,lineNumb):
