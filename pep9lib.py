@@ -155,7 +155,7 @@ class command:
         if len(space)-1>count:
             count+=1
         if self.inst=="":
-            return newLine
+            return newLine + self.com
         newLine+=pad(self.inst,space[count])
         if len(space)-1>count:
             count+=1
@@ -163,5 +163,6 @@ class command:
             newLine+=pad(",".join(i),space[count])
             if len(space)-1>count:
                 count+=1
+        newLine+=self.com
         return newLine
 
