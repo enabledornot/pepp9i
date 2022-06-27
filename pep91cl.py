@@ -26,12 +26,10 @@ def compile(filename):
     rslt.append(pep9lib.command(".END"))
     # Handle collision
     resolveCollisions(rslt)
-    # Fix formatting
-    pep9lib.formatFix(rslt,space=[10,10,10])
     # Exports
     nfile = ";compiled by python.pep91.v1\n"
     for i in rslt:
-        nfile+=i+"\n"
+        nfile+=i.formatLine()+"\n"
     with open("PEPP.pep","w") as f:
         f.write(nfile)
 def readCodeFile(filename):
