@@ -49,33 +49,34 @@ def compileRec(code):
     global appendd
     global macroList
     fdata = extractMacros(code)
+    # print(macroList)
     ndata = []
     for line in fdata:
-        split = pep9lib.splitArgs(line)
-        if len(split[0])==0 or split[0][0]==";":
+        # split = pep9lib.splitArgs(line)
+        # if len(split[0])==0 or split[0][0]==";":
+        #     ndata.append(line)
+        #     continue
+        if line.inst==".INCLUDE":
+            insertFileIntoList(ndata, line.args[0][0][1:-1])
+        elif line.inst==".APPEND":
+            appendd.append(line.args[0][0][1:-1])
+        elif line.inst==".GLOBAL":
             ndata.append(line)
-            continue
-        if split[0]==".INCLUDE":
-            insertFileIntoList(ndata, split[1][1:-1])
-        elif split[0]==".APPEND":
-            appendd.append(split[1][1:-1])
-        elif split[0]==".GLOBAL":
-            ndata.append(line)
-        elif split[0]==".END":
+        elif line.inst==".END":
             ndata.append("     BR     noend")
         else:
             pointer = ""
-            if split[0][-1]==":":
-                pointer = split.pop(0)
-            if split[0][0]!="." and not pep9check.instCheck(split[0]):
-                if split[0] in macroList:
-                    injectedMacro = injectArguments(split)
+            # if split[0][-1]==":":
+            #     pointer = split.pop(0)
+            if len(line.inst)!=0 and line.inst[0]!="." and not pep9check.instCheck(line.inst):
+                if line.inst in macroList:
+                    injectedMacro = injectArguments(line)
                     if pointer!="":
                         ndata.append(pointer + "     NOP0;")
                     insertIntoList(ndata,injectedMacro)
                 else:
-                    print("INVALID INSTRUCTION {}".format(split[0]))
-                    ndata.append(";;INVALID MACRO {}".format(split[0]))
+                    print("INVALID INSTRUCTION {}".format(line.inst))
+                    ndata.append(";;INVALID MACRO {}".format(line.inst))
             else:
                 ndata.append(line)
 
@@ -88,16 +89,18 @@ def extractVar(cmdstr):
     if splitUp[0][-1]==":":
         return splitUp[0][:-1]
     return ""
-def injectArguments(splitInst):
+def injectArguments(line):
     global macroList
-    macro = macroList[splitInst[0]]
-    macInst = macro["inst"].copy()
+    macro = macroList[line.inst]
+    macInst = []
+    for mLine in macro["inst"]:
+        macInst.append(mLine.copy())
     if len(macro["args"])>0:
-        macArgs = splitInst[1].split(",")
+        macArgs = line.args[0]
     cnt = 0
     for i in macro["args"]:
         for ii in range(len(macInst)):
-            macInst[ii] = macInst[ii].replace(i,macArgs[cnt])
+            macInst[ii].replace(i,macArgs[cnt])
         cnt+=1
     return macInst
 def extractMacros(fdata):
@@ -107,15 +110,15 @@ def extractMacros(fdata):
     macroArgs = []
     nfdata = []
     for line in fdata:
-        split = pep9lib.splitArgs(line)
-        if split[0]==".MACRO":
-            macroName = split[1]
-            if len(split)>2:
-                macroArgs = split[2].split(",")
+        # split = pep9lib.splitArgs(line)
+        if line.inst==".MACRO":
+            macroName = line.args[0][0]
+            if len(line.args)>1:
+                macroArgs = line.args[1]
             else:
                 macroArgs = []
-            macroInstructions = [";;" + macroName]
-        elif split[0]==".MACROEND":
+            macroInstructions = [pep9lib.command(";;" + macroName)]
+        elif line.inst==".MACROEND":
             macroList[macroName] = {
                 "args":macroArgs,
                 "inst":macroInstructions
@@ -125,8 +128,7 @@ def extractMacros(fdata):
             if macroName=="":
                 nfdata.append(line)
             else:
-                if len(line)!=0 and line[0]!=";":
-                    macroInstructions.append(line)
+                macroInstructions.append(line)
     return nfdata
 def insertFileIntoList(blist,ntoc):
     blist.append(";{ " + ntoc)
