@@ -47,13 +47,8 @@ def compileRec(code):
     global appendd
     global macroList
     fdata = extractMacros(code)
-    # print(macroList)
     ndata = []
     for line in fdata:
-        # split = pep9lib.splitArgs(line)
-        # if len(split[0])==0 or split[0][0]==";":
-        #     ndata.append(line)
-        #     continue
         if line.inst==".INCLUDE":
             insertFileIntoList(ndata, line.args[0][0][1:-1])
         elif line.inst==".APPEND":
@@ -64,8 +59,6 @@ def compileRec(code):
             ndata.append(pep9lib.command("     BR     noend"))
         else:
             pointer = ""
-            # if split[0][-1]==":":
-            #     pointer = split.pop(0)
             if len(line.inst)!=0 and line.inst[0]!="." and not pep9check.instCheck(line.inst):
                 if line.inst in macroList:
                     injectedMacro = injectArguments(line)
@@ -108,7 +101,6 @@ def extractMacros(fdata):
     macroArgs = []
     nfdata = []
     for line in fdata:
-        # split = pep9lib.splitArgs(line)
         if line.inst==".MACRO":
             macroName = line.args[0][0]
             if len(line.args)>1:
