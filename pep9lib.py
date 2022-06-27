@@ -105,6 +105,7 @@ def getComments(stri):
     return stri[loc:]
 class command:
     def __init__(self,stri):
+        self.original = stri
         self.pointer = getRef(stri)
         self.inst = getInst(stri)
         self.args = getArgs(stri)
@@ -129,8 +130,8 @@ class command:
             newStr+=self.pointer + ": "
         if self.inst!="":
             newStr+=self.inst + " "
-        if len(self.args)!=0:
-            newStr+=",".join(self.args) + " "
+        for subArg in self.args:
+            newStr+=",".join(subArg) + " "
         if self.com!="":
             newStr+=self.com
         return newStr
@@ -139,3 +140,6 @@ class command:
             for ii in range(len(self.args[i])):
                 if self.args[i][ii]==replace:
                     self.args[i][ii] = replacement
+    def copy(self):
+        new = command(self.rebuild())
+        return new
