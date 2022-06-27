@@ -1,6 +1,4 @@
 # IMPORTS
-from concurrent.futures.thread import _global_shutdown_lock
-from threading import local
 import pep9lib
 import pep9check
 from pep9col import resolveCollisions
