@@ -68,6 +68,8 @@ def formatFix(codeList,space=[10,10,10]):
         codeList[count] = formatLine(codeList[count],space=space)
         count+=1
 def formatLine(codeLine,space=[10,10,10]):
+    if isinstance(codeLine,command):
+        return codeLine.formatLine(space=space)
     if len(codeLine)==0 or codeLine[0]==";":
         return codeLine
     lineSplit = codeLine.split(";",1)
@@ -143,3 +145,22 @@ class command:
     def copy(self):
         new = command(self.rebuild())
         return new
+    def formatLine(self,space=[10,10,10]):
+        newLine = ""
+        count = 0
+        if self.pointer!="":
+            newLine+=pad(self.pointer+":",space[count])
+        else:
+            newLine+=" "*space[count]
+        if len(space)-1>count:
+            count+=1
+        if self.inst=="":
+            return newLine
+        newLine+=pad(self.inst,space[count])
+        if len(space)-1>count:
+            count+=1
+        for i in self.args:
+            newLine+=pad(",".join(i),space[count])
+            if len(space)-1>count:
+                count+=1
+
