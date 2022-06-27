@@ -6,18 +6,20 @@ def resolveCollisions(code):
     globalVars = []
     usedVars = []
     colCount = 0
-    newCMD = []
-    for i in code:
-        for ii in i.split("\n"):
-            newCMD.append(pep9lib.command(ii))
-            print(newCMD[-1])
-            if newCMD[-1].inst==".GLOBAL":
-                globalVars.append(newCMD[-1].args[0])
-                newCMD[-1] = pep9lib.command(";"+ii)
-    print(globalVars)
-    resolveCollisionsRec(newCMD,0)
-    for i in range(len(code)):
-        code[i] = newCMD[i].__str__()
+    # newCMD = []
+    # for i in code:
+    #     for ii in i.split("\n"):
+    #         newCMD.append(pep9lib.command(ii))
+    #         print(newCMD[-1])
+    #         if newCMD[-1].inst==".GLOBAL":
+    #             globalVars.append(newCMD[-1].args[0])
+    #             newCMD[-1] = pep9lib.command(";"+ii)
+    for line in code:
+        if line.inst==".GLOBAL":
+            globalVars.append(line.args[0][0])
+    resolveCollisionsRec(code,0)
+    # for i in range(len(code)):
+    #     code[i] = newCMD[i].__str__()
 def resolveCollisionsRec(code,lineNumb):
     count = lineNumb
     localVars = {}
