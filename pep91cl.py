@@ -25,7 +25,7 @@ def compile(filename):
     # Handle collision
     resolveCollisions(rslt)
     # Exports
-    nfile = ";compiled by python.pep91.v1\n"
+    nfile = ";compiled by python.pep9i.v1.1\n"
     for i in rslt:
         nfile+=i.formatLine()+"\n"
     with open("PEPP.pep","w") as f:
