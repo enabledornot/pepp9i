@@ -30,7 +30,7 @@ def compile(filename):
         nfile+=i.formatLine()+"\n"
     with open("PEPP.pep","w") as f:
         f.write(nfile)
-def readCodeFile(filename):
+def readCodeFile(filename,parent=None):
     global prevFiles
     if filename in prevFiles:
         return []
@@ -38,8 +38,8 @@ def readCodeFile(filename):
     with open(filename,"r") as f:
         rdata = f.read().split("\n")
     ncode = []
-    for i in rdata:
-        ncode.append(pep9lib.command(i))
+    for i in range(len(rdata)):
+        ncode.append(pep9lib.command(rdata[i],lineNumb=i,fileName=filename,parentCommand=parent))
     return ncode
 def compileRec(code):
     global appendd
@@ -64,7 +64,8 @@ def compileRec(code):
                     insertIntoList(ndata,injectedMacro)
                 else:
                     print("INVALID INSTRUCTION {}".format(line.inst))
-                    ndata.append(";;INVALID MACRO {}".format(line.inst))
+                    line.error("INVALID INSTRUCTION")
+                    # ndata.append(pep9lib.command(";;INVALID MACRO {}".format(line.inst)))
             else:
                 ndata.append(line)
 
