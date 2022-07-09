@@ -56,7 +56,7 @@ def compileRec(code):
         elif line.inst==".END":
             ndata.append(pep9lib.command("     BR     noend"))
         else:
-            if len(line.inst)!=0 and line.inst[0]!="." and not pep9check.instCheck(line.inst):
+            if len(line.inst)!=0 and not pep9check.instCheck(line.inst):
                 if line.inst in macroList:
                     injectedMacro = injectArguments(line)
                     if line.pointer!="":
