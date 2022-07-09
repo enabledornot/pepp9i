@@ -48,9 +48,9 @@ def compileRec(code):
     ndata = []
     for line in fdata:
         if line.inst==".INCLUDE":
-            insertFileIntoList(ndata, line.args[0][0][1:-1])
+            insertFileIntoList(ndata, line)
         elif line.inst==".APPEND":
-            appendd.append(line.args[0][0][1:-1])
+            appendd.append(line)
         elif line.inst==".GLOBAL":
             ndata.append(line)
         elif line.inst==".END":
@@ -118,9 +118,10 @@ def extractMacros(fdata):
             else:
                 macroInstructions.append(line)
     return nfdata
-def insertFileIntoList(blist,ntoc):
+def insertFileIntoList(blist,importLine):
+    ntoc = importLine.args[0][0][1:-1]
     blist.append(pep9lib.command(";{ " + ntoc))
-    insertIntoList(blist,readCodeFile(ntoc))
+    insertIntoList(blist,readCodeFile(ntoc,parent=importLine))
     blist.append(pep9lib.command(";} " + ntoc))
 def insertIntoList(blist,code):
     ncompile = compileRec(code)
