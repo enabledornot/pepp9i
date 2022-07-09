@@ -175,10 +175,14 @@ class command:
         newLine+=self.com
         return newLine
     def error(self,errorMsg=None):
+        if errorMsg!=None:
+            print("---- BEGIN ERROR ----")
         if self.parent!=None:
             self.parent.error()
         print("  File {} - Line {}".format(self.file,self.line))
         print("    "+self.formatLine())
         if errorMsg!=None:
             print(errorMsg)
+            print ("---- END ERROR ----")
+            print("")
 
