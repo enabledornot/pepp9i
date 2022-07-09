@@ -1,6 +1,9 @@
 # General library for dealing with pep9 assembly in python
 
 
+from lib2to3.pgen2.token import NEWLINE
+
+
 def splitArgs(stri):
     args = [""]
     inQuotes = False
@@ -171,4 +174,11 @@ class command:
                 count+=1
         newLine+=self.com
         return newLine
+    def error(self,errorMsg=None):
+        if self.parent!=None:
+            self.parent.error()
+        print("  File {} - Line {}".format(self.file,self.line))
+        print("    "+self.formatLine())
+        if errorMsg!=None:
+            print(errorMsg)
 
