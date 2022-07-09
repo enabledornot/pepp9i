@@ -63,7 +63,6 @@ def compileRec(code):
                         ndata.append(pep9lib.command(line.pointer+":" + "     NOP0;"))
                     insertIntoList(ndata,injectedMacro)
                 else:
-                    print("INVALID INSTRUCTION {}".format(line.inst))
                     line.error("INVALID INSTRUCTION")
                     # ndata.append(pep9lib.command(";;INVALID MACRO {}".format(line.inst)))
             else:
