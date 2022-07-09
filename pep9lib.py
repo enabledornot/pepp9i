@@ -106,12 +106,15 @@ def getComments(stri):
         return stri
     return stri[loc:]
 class command:
-    def __init__(self,stri):
+    def __init__(self,stri,lineNumb=None,fileName=None,parentCommand=None):
         self.original = stri
         self.pointer = getRef(stri)
         self.inst = getInst(stri)
         self.args = getArgs(stri)
         self.com = getComments(stri)
+        self.line = lineNumb
+        self.file = fileName
+        self.parent = parentCommand
         self.comLineAfter = False
     def __str__(self):
         return self.rebuild()
