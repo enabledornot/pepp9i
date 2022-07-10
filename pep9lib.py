@@ -7,6 +7,8 @@ def splitArgs(stri):
     args = [""]
     inQuotes = False
     for i in stri:
+        if i==";":
+            return args
         if i=="\"":
             inQuotes = not(inQuotes)
         if i==" " and not(inQuotes):
@@ -14,38 +16,6 @@ def splitArgs(stri):
                 args.append("")
         else:
             args[-1]+=i
-    return args
-def getRef(cmd):
-    cmd = removeComments(cmd)
-    split = splitArgs(cmd)
-    if len(split)==0 or len(split[0])==0:
-        return ""
-    if split[0][-1]==":":
-        return split[0][:-1]
-    return ""
-def getInst(cmd):
-    cmd = removeComments(cmd)
-    split = splitArgs(cmd)
-    if len(split)==0 or len(split[0])==0:
-        return ""
-    if split[0][-1]==":":
-        split.pop(0)
-    return split[0]
-def getArgs(cmd):
-    cmd = removeComments(cmd)
-    split = splitArgs(cmd)
-    if len(split)==0 or len(split[0])==0:
-        return []
-    if split[0][-1]==":":
-        split.pop(0)
-    if len(split)<=1:
-        return []
-    args = []
-    for i in split[1:]:
-        splits = i.split(",")
-        if "" in splits:
-            splits.remove("")
-        args.append(splits)
     return args
 def findQuotedData(strt):
     pos = 0
@@ -110,14 +80,33 @@ def getComments(stri):
 class command:
     def __init__(self,stri,lineNumb=None,fileName=None,parentCommand=None):
         self.original = stri
-        self.pointer = getRef(stri)
-        self.inst = getInst(stri)
-        self.args = getArgs(stri)
-        self.com = getComments(stri)
+        self.extractData(stri)
         self.line = lineNumb
         self.file = fileName
         self.parent = parentCommand
         self.comLineAfter = False
+    def extractData(self,stri):
+        self.pointer = ""
+        self.inst = ""
+        self.args = []
+        self.com = getComments(stri)
+        split = splitArgs(stri)
+        if len(split)==0 or len(split[0])<2:
+            return
+        if split[0][-1]==":":
+            self.pointer = split.pop(0)[:-1]
+        if len(split)==0:
+            return
+        self.inst = split[0]
+        if len(split)==1:
+            return
+        args = []
+        for i in split[1:]:
+            splits = i.split(",")
+            if "" in splits:
+                splits.remove("")
+            args.append(splits)
+        self.args = args
     def __str__(self):
         return self.rebuild()
     def isPoint(self):
