@@ -1,3 +1,4 @@
 import sys
-import pep9icl as ci
+import pep9icl
+ci = pep9icl.pep9i()
 ci.compile(sys.argv[1])
