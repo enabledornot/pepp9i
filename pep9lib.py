@@ -1,8 +1,7 @@
 # General library for dealing with pep9 assembly in python
 
 
-from lib2to3.pgen2.token import NEWLINE
-
+import copy
 
 def splitArgs(stri):
     args = [""]
@@ -150,7 +149,7 @@ class command:
                 if self.args[i][ii]==replace:
                     self.args[i][ii] = replacement
     def copy(self):
-        new = command(self.rebuild())
+        new = copy.copy(self)
         return new
     def formatLine(self,space=[10,10,10]):
         newLine = ""
