@@ -5,17 +5,19 @@ import copy
 
 def splitArgs(stri):
     args = [""]
-    inQuotes = False
-    for i in stri:
-        if i==";":
+    quotes = ""
+    for char in stri:
+        if char==";":
             return args
-        if i=="\"":
-            inQuotes = not(inQuotes)
-        if i==" " and not(inQuotes):
+        elif char==quotes:
+            quotes = ""
+        elif char=="\"" or char=="'":
+            quotes = char
+        if char==" " and quotes=="":
             if args[-1]!="":
                 args.append("")
-        else:
-            args[-1]+=i
+        if char!=" ":
+            args[-1]+=char
     return args
 def findQuotedData(strt):
     pos = 0
@@ -65,10 +67,15 @@ def pad(stri,leng,chart=' '):
     return stri + (leng-len(stri))*chart
 def removeComments(stri):
     nstri = ""
-    for i in stri:
-        if i == ";":
+    spaces = ""
+    for char in stri:
+        if char == ";":
             return nstri
-        nstri+=i
+        elif char == " ":
+            spaces+=" "
+        else:
+            nstri+=spaces + char
+        spaces = ""
     return nstri
 def getComments(stri):
     loc = stri.find(";")
