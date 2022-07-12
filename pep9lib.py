@@ -139,6 +139,7 @@ class command:
                     self.args[i][ii] = replacement
     def copy(self):
         new = copy.copy(self)
+        new.args = copy.deepcopy(self.args)
         return new
     def formatLine(self,space=[10,10,10]):
         newLine = ""
