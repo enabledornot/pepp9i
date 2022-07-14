@@ -3,6 +3,7 @@ import pep9lib
 import pep9check
 from pep9col import resolveCollisions
 class pep9i:
+    version = "python.pep9i.v1.2"
     def __init__(self,removeEmptyLines=True,removeAllOriginalComments=False,fileHandler=None):
         self.removeEmptyLines = removeEmptyLines
         self.removeAllOriginalComments = removeAllOriginalComments
@@ -25,7 +26,7 @@ class pep9i:
         # Handle collision
         resolveCollisions(rslt)
         # Exports
-        nfile = ";compiled by python.pep9i.v1.1\n"
+        nfile = ";compiled by {}\n".format(self.version)
         for i in rslt:
             nfile+=i.formatLine()+"\n"
         with open("PEPP.pep","w") as f:

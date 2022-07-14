@@ -15,4 +15,5 @@ if "-includeComments" in args:
 else:
     removeAllComments = False
 ci = pep9icl.pep9i(removeEmptyLines=removeEmpty,removeAllOriginalComments=removeAllComments)
+print("compiling {} with {}".format(args[1],ci.version))
 ci.compile(args[1])
