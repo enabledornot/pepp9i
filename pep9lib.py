@@ -36,33 +36,6 @@ def findQuotedData(strt):
                     indata+=i
         pos+=1
     return indata
-def formatFix(codeList,space=[10,10,10]):
-    count = 0
-    while len(codeList)>count:
-        codeList[count] = formatLine(codeList[count],space=space)
-        count+=1
-def formatLine(codeLine,space=[10,10,10]):
-    if isinstance(codeLine,command):
-        return codeLine.formatLine(space=space)
-    if len(codeLine)==0 or codeLine[0]==";":
-        return codeLine
-    lineSplit = codeLine.split(";",1)
-    codeLine = lineSplit[0]
-    if len(lineSplit)==1:
-        comLine = ""
-    else:
-        comLine = ";"+lineSplit[1]
-    split = splitArgs(codeLine)
-    if len(split)<2:
-        return codeLine
-    newLine = ""
-    count = 0
-    for i in split[:-1]:
-        newLine+=pad(i,space[count])
-        if count!=len(space)-1:
-            count+=1
-    newLine+=split[-1]
-    return newLine + comLine
 def pad(stri,leng,chart=' '):
     return stri + (leng-len(stri))*chart
 def removeComments(stri):
@@ -149,29 +122,36 @@ class command:
         new.args = copy.deepcopy(self.args)
         return new
     def formatLine(self,space=[10,10,10]):
-        newLine = ""
         if self.inst=="":
             return self.com
+        newList = []
+        if self.pointer!="":
+            newList.append(self.pointer+":")
+        else:
+            newList.append("")
+        newList.append(self.inst)
+        if len(self.args)>0:
+            newList.append(",".join(self.args[0]))
+        else:
+            newList.append("")
+        newLine = ""
         if self.comLineAfter:
             newLine = ";"
-        count = 0
-        if self.pointer!="":
-            newLine+=pad(self.pointer+":",space[count])
-        else:
-            newLine+=" "*space[count]
-        if len(space)-1>count:
-            count+=1
-        if self.inst=="":
-            return newLine + self.com
-        newLine+=pad(self.inst,space[count])
-        if len(space)-1>count:
-            count+=1
-        for i in self.args:
-            newLine+=pad(",".join(i),space[count])
-            if len(space)-1>count:
-                count+=1
+        newLine+= self.formatList(newList,space=space,allSpaces=self.com!="")
         newLine+=self.com
         return newLine
+    def formatList(self,list,space=[10,10,10],allSpaces=False):
+        str = ""
+        count = 0
+        for element in list:
+            str+=pad(element,space[count])
+            if count<len(space):
+                count+=1
+        if allSpaces:
+            while count<len(space):
+                str+=" "*10
+        return str
+
     def error(self,errorMsg=None):
         if errorMsg!=None:
             print("---- BEGIN ERROR ----")
