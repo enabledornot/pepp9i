@@ -150,6 +150,8 @@ class command:
         return new
     def formatLine(self,space=[10,10,10]):
         newLine = ""
+        if self.inst=="":
+            return self.com
         if self.comLineAfter:
             newLine = ";"
         count = 0
