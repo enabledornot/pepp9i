@@ -3,12 +3,16 @@ import pep9lib
 import pep9check
 from pep9col import resolveCollisions
 class pep9i:
-    def __init__(self,removeEmptyLines=True,removeAllOriginalComments=False):
+    def __init__(self,removeEmptyLines=True,removeAllOriginalComments=False,fileHandler=None):
         self.removeEmptyLines = removeEmptyLines
         self.removeAllOriginalComments = removeAllOriginalComments
         self.appendd = []
         self.macroList = {}
         self.prevFiles = []
+        if fileHandler==None:
+            self.file = defaultFileHandler()
+        else:
+            self.file = fileHandler
     def compile(self,filename):
         # Compiles code with appends and includes
         rslt = self.compileRec(self.readCodeFile(filename))
@@ -30,11 +34,10 @@ class pep9i:
         if filename in self.prevFiles:
             return []
         self.prevFiles.append(filename)
-        with open(filename,"r") as f:
-            rdata = f.read().split("\n")
+        rawFile = self.file.read(filename,{})
         ncode = []
-        for i in range(len(rdata)):
-            ncode.append(pep9lib.command(rdata[i],lineNumb=i,fileName=filename,parentCommand=parent))
+        for i in range(len(rawFile)):
+            ncode.append(pep9lib.command(rawFile[i],lineNumb=i,fileName=filename,parentCommand=parent))
         return ncode
     def compileRec(self,code):
         fdata = self.extractMacros(code)
@@ -119,3 +122,8 @@ class pep9i:
         ncompile = self.compileRec(code)
         for j in ncompile:
             blist.append(j)
+class defaultFileHandler:
+    def read(self,filename,args):
+        with open(filename, "r") as file:
+            code = file.read().split("\n")
+        return code
