@@ -3,7 +3,9 @@ import pep9lib
 import pep9check
 from pep9col import resolveCollisions
 class pep9i:
-    def __init__(self):
+    def __init__(self,removeEmptyLines=True,removeAllOriginalComments=False):
+        self.removeEmptyLines = removeEmptyLines
+        self.removeAllOriginalComments = removeAllOriginalComments
         self.appendd = []
         self.macroList = {}
         self.prevFiles = []
@@ -47,7 +49,12 @@ class pep9i:
             elif line.inst==".END":
                 ndata.append(pep9lib.command("     BR     noend"))
             else:
-                if len(line.inst)!=0 and not pep9check.instCheck(line.inst):
+                if len(line.inst)==0:
+                    if (line.com!="" or not self.removeEmptyLines) and not self.removeAllOriginalComments:
+                        ndata.append(line)
+                elif pep9check.instCheck(line.inst):
+                    ndata.append(line)
+                else:
                     if line.inst in self.macroList:
                         injectedMacro = self.injectArguments(line)
                         if line.pointer!="":
@@ -55,8 +62,6 @@ class pep9i:
                         self.insertIntoList(ndata,injectedMacro)
                     else:
                         line.error("INVALID INSTRUCTION")
-                else:
-                    ndata.append(line)
 
         return ndata
     colCount = 0
