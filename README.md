@@ -29,11 +29,11 @@ python pep91c.py filename.pep2
 # Todo
 
 - [x] Implement all pep9 instructions
-- [ ] Improve error handling and detection (print line number and file of incorrect syntax)
+- [x] Improve error handling and detection (print line number and file of incorrect syntax)
 - [ ] Load imports from another location
 - [ ] Organize external imports in folders
 - [ ] Create auto updater and installer
-- [ ] Add compiler options like removing comments or printing imported files
+- [x] Add compiler options like removing comments or printing imported files
 
 # Syntax
 
