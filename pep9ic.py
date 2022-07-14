@@ -8,9 +8,9 @@ if "-help" in args or 1 not in args:
     print("{} <program.pep2> [-includeBlank] [-includeComments]".format(args[0]))
     quit()
 if "-includeBlank" in args:
-    removeEmpty = True
-else:
     removeEmpty = False
+else:
+    removeEmpty = True
 if "-includeComments" in args:
     removeAllComments = True
 else:
