@@ -11,13 +11,16 @@ def splitArgs(stri):
             return args
         elif char==quotes:
             quotes = ""
-        elif char=="\"" or char=="'":
+        elif char=="\"" or char=="'" and quotes=="":
             quotes = char
-        if char==" " and quotes=="":
-            if args[-1]!="":
-                args.append("")
-        if char!=" ":
+        if quotes!="":
             args[-1]+=char
+        else:
+            if char==" ":
+                if args[-1]!="":
+                    args.append("")
+            else:
+                args[-1]+=char
     return args
 def findQuotedData(strt):
     pos = 0
@@ -124,6 +127,8 @@ class command:
     def formatLine(self,space=[10,10,10]):
         if self.inst=="":
             return self.com
+        if self.inst==".ASCII":
+            print(self.args)
         newList = []
         if self.pointer!="":
             newList.append(self.pointer+":")
@@ -149,7 +154,9 @@ class command:
                 count+=1
         if allSpaces:
             while count<len(space):
-                str+=" "*10
+                str+=" "*space
+                if count<len(space):
+                    count+=1
         return str
 
     def error(self,errorMsg=None):
