@@ -90,7 +90,6 @@ class command:
             return
         args = []
         for i in split[1:]:
-            # splits = splitArgs(i,splitChar=",")
             splits = i.split(",")
             if "" in splits:
                 splits.remove("")
@@ -133,8 +132,6 @@ class command:
     def formatLine(self,space=[10,10,10]):
         if self.inst=="":
             return self.com
-        # if self.inst==".ASCII":
-        #     print(self.args)
         newList = []
         if self.pointer!="":
             newList.append(self.pointer+":")
