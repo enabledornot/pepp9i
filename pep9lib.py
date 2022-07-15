@@ -3,24 +3,29 @@
 
 import copy
 
-def splitArgs(stri):
+def splitArgs(stri,splitChar=" "):
     args = [""]
-    quotes = ""
-    for char in stri:
-        if char==";":
+    count = 0
+    while count<len(stri):
+        if stri[count] in ["'","\""]:
+            stopChar = stri[count]
+            args[-1]+=stri[count]
+            count+=1
+            while count<len(stri) and stri[count]!=stopChar:
+                args[-1]+=stri[count]
+                count+=1
+            if count<len(stri):
+                args[-1]+=stri[count]
+                count+=1
+        elif stri[count]==";":
             return args
-        elif char==quotes:
-            quotes = ""
-        elif char=="\"" or char=="'" and quotes=="":
-            quotes = char
-        if quotes!="":
-            args[-1]+=char
         else:
-            if char==" ":
+            if stri[count]==splitChar:
                 if args[-1]!="":
                     args.append("")
             else:
-                args[-1]+=char
+                args[-1]+=stri[count]
+            count+=1
     return args
 def findQuotedData(strt):
     pos = 0
@@ -85,6 +90,7 @@ class command:
             return
         args = []
         for i in split[1:]:
+            # splits = splitArgs(i,splitChar=",")
             splits = i.split(",")
             if "" in splits:
                 splits.remove("")
@@ -127,8 +133,8 @@ class command:
     def formatLine(self,space=[10,10,10]):
         if self.inst=="":
             return self.com
-        if self.inst==".ASCII":
-            print(self.args)
+        # if self.inst==".ASCII":
+        #     print(self.args)
         newList = []
         if self.pointer!="":
             newList.append(self.pointer+":")
