@@ -1,8 +1,12 @@
 import pep9lib
 class pepAdvancedFileHandler:
     def read(self,filename,args):
-        with open(filename,"r") as file:
-            code = file.read().split("\n")
+        try:
+            with open(filename,"r") as file:
+                code = file.read().split("\n")
+        except:
+            args['parent'].error("File Not Found error")
+            return [pep9lib.command(";FILE NOT FOUND ERROR")]
         newCode = []
         count = 0
         for line in code:
