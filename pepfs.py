@@ -8,8 +8,9 @@ class pepAdvancedFileHandler:
             self.folders.append(importFolder(folder))
     def handleFiles(self,fileName):
         for folder in self.folders:
-            if folder.search(fileName):
-                with open(folder.name + "\\" + fileName,"r") as file:
+            searched = folder.search(fileName)
+            if searched!="":
+                with open(searched) as file:
                     code = file.read().split("\n")
                 return code
     def read(self,filename,args):
@@ -31,7 +32,16 @@ class importFolder:
         for file in list:
             if os.path.isfile(folderName + "\\" + file):
                 self.files.append(file.lower())
-    def search(self,string):
-        if string.lower() in self.files:
-            return True
-        return False
+            else:
+                if file[0]!="_" and file[0]!=".":
+                    self.files.append(importFolder(folderName + "\\" + file))
+    def search(self,key):
+        for file in self.files:
+            if isinstance(file,importFolder):
+                searched = file.search(key)
+                if searched!="":
+                    return searched
+            else:
+                if file==key.lower():
+                    return self.name + "\\" + file
+        return ""
