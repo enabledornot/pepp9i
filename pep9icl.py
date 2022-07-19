@@ -36,7 +36,9 @@ class pep9i:
             parent.error(errorMsg="recursive import")
             return []
         self.prevFiles.append(filename)
-        rawFile = self.file.read(filename,{})
+        rawFile = self.file.read(filename,{
+            "parent":parent
+        })
         if isinstance(rawFile[0],pep9lib.command):
             return rawFile
         ncode = []

@@ -6,6 +6,6 @@ class pepAdvancedFileHandler:
         newCode = []
         count = 0
         for line in code:
-            newCode.append(pep9lib.command(line,lineNumb=count,fileName=filename))
+            newCode.append(pep9lib.command(line,lineNumb=count,fileName=filename,parentCommand=args['parent']))
             count+=1
         return newCode
