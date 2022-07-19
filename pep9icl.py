@@ -33,9 +33,12 @@ class pep9i:
             f.write(nfile)
     def readCodeFile(self,filename,parent=None):
         if filename in self.prevFiles:
+            parent.error(errorMsg="recursive import")
             return []
         self.prevFiles.append(filename)
         rawFile = self.file.read(filename,{})
+        if isinstance(rawFile[0],pep9lib.command):
+            return rawFile
         ncode = []
         for i in range(len(rawFile)):
             ncode.append(pep9lib.command(rawFile[i],lineNumb=i,fileName=filename,parentCommand=parent))
