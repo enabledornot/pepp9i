@@ -3,11 +3,13 @@ import os
 class pepAdvancedFileHandler:
     def __init__(self,folderCheck):
         self.fslist = folderCheck
-    def handleFiles(self,fileName):
+        self.folders = []
         for folder in self.fslist:
-            if fileName in os.listdir(folder):
-                print(folder + "\\" + fileName)
-                with open(folder + "\\" + fileName,"r") as file:
+            self.folders.append(importFolder(folder))
+    def handleFiles(self,fileName):
+        for folder in self.folders:
+            if folder.search(fileName):
+                with open(folder.name + "\\" + fileName,"r") as file:
                     code = file.read().split("\n")
                 return code
     def read(self,filename,args):
@@ -21,3 +23,15 @@ class pepAdvancedFileHandler:
             newCode.append(pep9lib.command(line,lineNumb=count,fileName=filename,parentCommand=args['parent']))
             count+=1
         return newCode
+class importFolder:
+    def __init__(self,folderName):
+        list = os.listdir(folderName)
+        self.name = folderName
+        self.files = []
+        for file in list:
+            if os.path.isfile(folderName + "\\" + file):
+                self.files.append(file.lower())
+    def search(self,string):
+        if string.lower() in self.files:
+            return True
+        return False
