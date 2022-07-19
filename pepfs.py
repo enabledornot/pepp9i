@@ -1,12 +1,20 @@
 import pep9lib
+import os
 class pepAdvancedFileHandler:
+    def __init__(self,folderCheck):
+        self.fslist = folderCheck
+    def handleFiles(self,fileName):
+        for folder in self.fslist:
+            if fileName in os.listdir(folder):
+                print(folder + "\\" + fileName)
+                with open(folder + "\\" + fileName,"r") as file:
+                    code = file.read().split("\n")
+                return code
     def read(self,filename,args):
-        try:
-            with open(filename,"r") as file:
-                code = file.read().split("\n")
-        except:
-            args['parent'].error("File Not Found error")
-            return [pep9lib.command(";FILE NOT FOUND ERROR")]
+        code = self.handleFiles(filename)
+        if code==None:
+            args['parent'].error("File import error")
+            return []
         newCode = []
         count = 0
         for line in code:

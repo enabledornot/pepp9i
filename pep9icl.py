@@ -39,7 +39,7 @@ class pep9i:
         rawFile = self.file.read(filename,{
             "parent":parent
         })
-        if isinstance(rawFile[0],pep9lib.command):
+        if len(rawFile)!=0 and isinstance(rawFile[0],pep9lib.command):
             return rawFile
         ncode = []
         for i in range(len(rawFile)):
