@@ -40,7 +40,7 @@ class importFolder:
         for file in self.files:
             base = os.path.basename(file)
             if base==key.lower():
-                return self.name + "\\" + file
+                return file
         return ""
     def search(self,key):
         if isPath(key):
@@ -51,7 +51,7 @@ class importFolder:
         return rslt
 def explore(path,list):
     if os.path.isfile(path):
-        list.append(path)
+        list.append(path.lower())
         return
     if os.path.isdir(path) and checkPath(path):
         for newPath in os.listdir(path):
