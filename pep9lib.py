@@ -173,4 +173,6 @@ class command:
             print(errorMsg)
             print ("---- END ERROR ----")
             print("")
-
+class dummyCommand:
+    def error(self,errorMsg=None):
+        print("Head Import error")
