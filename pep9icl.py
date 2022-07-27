@@ -3,7 +3,7 @@ import pep9lib
 import pep9check
 from pep9col import resolveCollisions
 class pep9i:
-    version = "python.pep9i.v1.3"
+    version = "python.pep9i.v1.4"
     def __init__(self,removeEmptyLines=True,removeAllOriginalComments=False,fileHandler=None):
         self.removeEmptyLines = removeEmptyLines
         self.removeAllOriginalComments = removeAllOriginalComments
