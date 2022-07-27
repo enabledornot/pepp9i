@@ -31,7 +31,7 @@ class pep9i:
             nfile+=i.formatLine()+"\n"
         with open("PEPP.pep","w") as f:
             f.write(nfile)
-    def readCodeFile(self,filename,parent=None):
+    def readCodeFile(self,filename,parent=pep9lib.dummyCommand()):
         if filename in self.prevFiles:
             parent.error(errorMsg="recursive import")
             return []

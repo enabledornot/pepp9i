@@ -1,3 +1,4 @@
+from fileinput import filename
 import pep9lib
 import os
 class pepAdvancedFileHandler:
@@ -8,7 +9,11 @@ class pepAdvancedFileHandler:
             self.folders.append(importFolder(folder))
     def handleFiles(self,fileName):
         for folder in self.folders:
-            searched = folder.search(fileName)
+            ext = getext(fileName)
+            if ext=="pep1" or ext=="pep2":
+                searched = folder.deepSearch(fileName)
+            else:
+                searched = folder.search(fileName)
             if searched!="":
                 with open(searched) as file:
                     code = file.read().split("\n")
@@ -26,22 +31,66 @@ class pepAdvancedFileHandler:
         return newCode
 class importFolder:
     def __init__(self,folderName):
-        list = os.listdir(folderName)
         self.name = folderName
         self.files = []
-        for file in list:
-            if os.path.isfile(folderName + "\\" + file):
-                self.files.append(file.lower())
-            else:
-                if file[0]!="_" and file[0]!=".":
-                    self.files.append(importFolder(folderName + "\\" + file))
-    def search(self,key):
+        explore(folderName,self.files)
+    def deepSearch(self,key):
+        if isPath(key):
+            return key
         for file in self.files:
-            if isinstance(file,importFolder):
-                searched = file.search(key)
-                if searched!="":
-                    return searched
-            else:
-                if file==key.lower():
-                    return self.name + "\\" + file
+            base = os.path.basename(file)
+            if base==key.lower():
+                return self.name + "\\" + file
+        return ""
+    def search(self,key):
+        if isPath(key):
+            newPath = path(pathName=key)
+        else:
+            newPath = path(pathName=self.name+"\\"+key)
+        rslt = newPath.locate()
+        return rslt
+def explore(path,list):
+    if os.path.isfile(path):
+        list.append(path)
+        return
+    if os.path.isdir(path) and checkPath(path):
+        for newPath in os.listdir(path):
+            explore(path + "\\" + newPath,list)
+def checkPath(path):
+    base = os.path.basename(path)
+    if len(base)==0 or base[0]=="_" or base[0]==".":
+        return False
+    return True
+def isPath(path):
+    return len(path)>1 and (path[1]==":" or path[0]=="\\")
+def getext(path):
+    return path.split(".")[-1]
+class path:
+    def __init__(self,pathName=None,pathHead=None,pathTail=None):
+        if pathHead!=None:
+            self.folder = pathHead
+            self.file = pathTail
+            return
+        head,tail = os.path.split(pathName)
+        self.folder = head.split("\\")
+        self.file = tail.split(".")
+    def toStr(self):
+        return "\\".join(self.folder)+"\\"+".".join(self.file)
+    def getFolder(self):
+        return "\\".join(self.folder)
+    def shift(self):
+        self.folder.append(self.file.pop(0))
+    def deshift(self):
+        self.file.insert(0,self.folder.pop(-1))
+    def locate(self):
+        while os.path.isdir(self.getFolder()):
+            if os.path.isfile(self.toStr()):
+                return self.toStr()
+            self.shift()
+        self.deshift()
+        print(self.toStr())
+        if os.path.isfile(self.toStr()):
+            return self.toStr()
+        if len(self.file)==0:
+            return self.getFolder()
         return ""

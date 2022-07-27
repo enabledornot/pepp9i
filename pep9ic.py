@@ -19,4 +19,4 @@ else:
 fshandler = pepfs.pepAdvancedFileHandler([os.getcwd()])
 ci = pep9icl.pep9i(removeEmptyLines=removeEmpty,removeAllOriginalComments=removeAllComments,fileHandler=fshandler)
 print("compiling {} with {}".format(args[1],ci.version))
-ci.compile(args[1])
+ci.compile(os.getcwd()+"\\"+args[1])
