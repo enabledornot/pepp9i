@@ -1,5 +1,6 @@
-# pepp9i
-Translates pep9i programs into pep9
+![pepplus logo](peppluslogo.png)
+# PEPplus
+Translates PEPplus and pep9i programs into pep9
 
 This project is still in beta and will not have perfect compatibility with all pep9i programs. **Use this software at your own risk.**
 
@@ -11,18 +12,17 @@ This project is still in beta and will not have perfect compatibility with all p
  - [Syntax Reference](#syntax)
 
 # Goal
-My goal with this project is to create an open source pep9i compiler written in python to make changes and enhancements easier. I would also like to add an improved file importing system to prevent cluttering the project folder and accidentally committing library files to github.
+The goal of this project is to create an open source pepplus/pep9i compiler written in python to make changes and enhancements easier. I would also like to add an improved file importing system to prevent cluttering the project folder and accidentally committing library files to github.
 
 
 # Vocabulary
-Throughout this documentation you may see pep9i files be referred to as ```pep92```, ```pep91``` or simply ```pepi```. They all essentially mean the same thing and the compiler itself makes no distinction between the file types. You could call your pep9i programs whatever you want as the extension is required in the filename. In the future I would like to shift to using ```.pepi``` as the default pep9i file extension but for now this compiler does not check.
-
+PEPplus refers to this project and the architecture created by this project. Pep9i refers to the existing pep9i architecture and compiler included in the original project. Files designed for the original pep9i compiler usually have the extention ```.pep2``` or ```.pep1```.
 
 # Usage
 
-```.pep1``` and ```.pep2``` files can be compiled using this command assuming you have all the included or appended files inside the project directory.
+```.pep1```,```.pep2``` and ```.pepp``` files can be compiled using this command assuming you have all the included or appended files inside the project directory.
 ```
-python pep91c.py filename.pep2
+python pep91c.py filename.pepp
 ```
 
 
@@ -37,7 +37,10 @@ python pep91c.py filename.pep2
 
 # Syntax
 
-These are the default methods included within the pepi compiler. Typically pep9i or pep92 are bundled with a macros file to enhance the existing pep architecture but they are not included here.
+These are the default methods included within the PEPplus compiler. Typically pep9i or pep92 are bundled with a macros file to enhance the existing pep architecture but they are not included here.
+
+This compiler loads external files differently depending on the extension provided. If you import a ```.pep2``` or ```.pep1``` file it will assume you are using legacy imports and search all included sub directories for files matching that name. If you import any other filetype it assumes you are using the new import mode and it assumes you are loading the library directly. This new import mode uses ```.``` in place of ```/```. If you wanted to load the file called ```peplib/main.pepp``` from your program folder you would use ```.INCLUDE    peplib.main.pepp```.
+
 
 |Symbol|Example|Description|
 | --- | --- | --- |
