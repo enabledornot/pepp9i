@@ -49,6 +49,8 @@ class pep9i:
         fdata = self.extractMacros(code)
         ndata = []
         for line in fdata:
+            if self.removeAllOriginalComments:
+                line.com = ""
             if line.inst==".INCLUDE":
                 self.insertFileIntoList(ndata, line)
             elif line.inst==".APPEND":
@@ -59,7 +61,7 @@ class pep9i:
                 ndata.append(pep9lib.command("     BR     noend"))
             else:
                 if len(line.inst)==0:
-                    if (line.com!="" or not self.removeEmptyLines) and not self.removeAllOriginalComments:
+                    if (line.com!="" or not self.removeEmptyLines):
                         ndata.append(line)
                 elif pep9check.instCheck(line.inst):
                     ndata.append(line)

@@ -6,13 +6,13 @@ import os
 args = args2json.parse(sys.argv)
 # handle arguments
 if "-help" in args or 1 not in args:
-    print("{} <program.pep2> [-includeBlank] [-includeComments]".format(args[0]))
+    print("{} <program.pep2> [-includeBlank] [-removeComments]".format(args[0]))
     quit()
 if "-includeBlank" in args:
     removeEmpty = False
 else:
     removeEmpty = True
-if "-includeComments" in args:
+if "-removeComments" in args:
     removeAllComments = True
 else:
     removeAllComments = False
