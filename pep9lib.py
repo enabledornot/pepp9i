@@ -175,4 +175,4 @@ class command:
             print("")
 class dummyCommand:
     def error(self,errorMsg=None):
-        print("Head Import error")
+        return
